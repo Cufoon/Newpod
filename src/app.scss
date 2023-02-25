@@ -1,0 +1,16 @@
+.app {
+  &-layout {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100vh;
+    background: rgb(240, 240, 240);
+  }
+
+  &-content {
+    flex: 1 0 min-content;
+    display: flex;
+    flex-direction: column;
+    padding: 2px 8px 10px;
+  }
+}

@@ -1,0 +1,27 @@
+.outer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
+
+  .png {
+    width: 255.975px;
+    height: 237.578px;
+    background-image: url('~$assets/404.svg');
+    background-size: cover;
+  }
+
+  .text {
+    font-size: 28px;
+    font-weight: bold;
+    color: rgb(255, 151, 151);
+    margin-top: 50px;
+  }
+
+  .hint {
+    font-size: 16px;
+    color: rgb(160, 160, 160);
+    margin-top: 10px;
+  }
+}

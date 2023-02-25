@@ -1,0 +1,27 @@
+.wrapper {
+  box-sizing: border-box;
+  padding: 0 12px;
+  border-style: solid;
+  border-radius: 12px;
+  border-width: 2px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+}
+
+@keyframes rotateAlways {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.rotate-icon {
+  animation: rotateAlways 1s infinite;
+}

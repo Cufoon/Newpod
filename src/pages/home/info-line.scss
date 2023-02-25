@@ -1,0 +1,21 @@
+.info-line {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid rgb(240, 240, 240);
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: rgb(136, 136, 136);
+  flex-wrap: wrap;
+
+  &-title {
+    flex: 0 0 fit-content;
+  }
+
+  &-content {
+    flex: 0 0 fit-content;
+    display: flex;
+    justify-content: flex-end;
+  }
+}

@@ -1,0 +1,14 @@
+# PC Desktop
+last 3 Chrome major version and supports es6-module
+last 3 Edge major version and supports es6-module
+last 3 Opera major version and supports es6-module
+last 3 Firefox major version and supports es6-module
+last 2 Safari major version and supports es6-module
+
+# Android
+last 3 ChromeAndroid major version and supports es6-module
+last 3 FirefoxAndroid major version and supports es6-module
+last 3 Android major version and supports es6-module
+
+# IOS
+last 2 ios_saf major version and supports es6-module

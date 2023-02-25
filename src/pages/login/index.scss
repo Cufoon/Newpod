@@ -1,0 +1,109 @@
+.main {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(240, 242, 245);
+}
+
+.left-part {
+  flex: 0 0 auto;
+  width: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.right-part {
+  flex: 0 0 auto;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 440px;
+  height: auto;
+  padding: 20px;
+  margin-bottom: 48px;
+
+  .titleLine {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    padding-top: 20px;
+    user-select: none;
+
+    .icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 12px;
+      background-image: url('~$assets/logo.svg');
+      background-size: 100% 200%;
+      background-position: center center;
+    }
+
+    .title {
+      margin-left: 5px;
+      color: rgb(0, 0, 0);
+      font-size: 36px;
+      line-height: 40px;
+      text-align: center;
+      font-weight: bold;
+    }
+  }
+
+  .titleHint {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.45);
+    margin-top: 12px;
+    margin-bottom: 60px;
+    user-select: none;
+    text-align: center;
+  }
+
+  .form {
+    border-radius: 12px;
+    width: 350px;
+    align-items: center;
+    padding: 36px 40px 16px;
+    background-color: rgb(255, 255, 255);
+
+    &-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      background-color: rgb(255, 255, 255);
+      border-radius: 12px;
+
+      & > div {
+        width: 100%;
+      }
+    }
+
+    &-input {
+      border-radius: 12px;
+      background-color: rgb(255, 255, 255);
+      box-shadow: 0 4px 8px rgba(192, 192, 192, 0.1);
+
+      & > span {
+        & > span {
+          border-radius: 12px;
+        }
+      }
+    }
+
+    &-submit {
+      border-radius: 12px;
+      width: 100%;
+    }
+  }
+}

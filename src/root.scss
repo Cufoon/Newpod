@@ -1,0 +1,64 @@
+// fix antd some ex styles
+.custom-antd-message-style {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+}
+
+// fix arco ex styles
+body {
+  --border-radius-none: 4px;
+  --border-radius-small: 8px;
+  --border-radius-medium: 10px;
+  --border-radius-large: 12px;
+}
+
+html {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+
+  $borderRadius: 12px;
+
+  &::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+    border-radius: $borderRadius;
+    background-color: rgb(240, 240, 240);
+  }
+
+  // 定义滚动条轨道
+  &::-webkit-scrollbar-track {
+    border-radius: $borderRadius;
+    background-color: rgb(240, 240, 240);
+  }
+
+  &::-webkit-scrollbar-button {
+    width: 4px;
+    height: 4px;
+    border-radius: $borderRadius;
+    background-color: rgb(240, 240, 240);
+  }
+
+  // 定义滑块
+  &::-webkit-scrollbar-thumb {
+    border: 4px solid rgb(255, 255, 255);
+    border-radius: $borderRadius;
+    background-color: rgb(200, 200, 200);
+  }
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  min-height: 100vh;
+  background: rgb(240, 240, 240);
+  box-sizing: border-box;
+  font-family: 'MiSans', 'SF Pro SC', 'SF Pro Text', 'SF Pro Icons', 'PingFang SC',
+    'HarmonyOS_Regular', 'Helvetica Neue', 'Microsoft YaHei', 'Helvetica', 'Arial', sans-serif;
+}
+
+div,
+footer,
+main {
+  box-sizing: border-box;
+}
