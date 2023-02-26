@@ -36,6 +36,7 @@
       .arco-radio-button {
         margin: 2px;
         border-radius: 12px;
+        user-select: none;
 
         &::before {
           display: none;

@@ -64,72 +64,69 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className={styles.main}>
-      <div className={styles.leftPart}>{/** 为以后添加内容做保留 */}</div>
-      <div className={styles.rightPart}>
-        <div className={styles.content}>
-          <div className={styles.titleLine}>
-            <div className={styles.icon} />
-            <div className={styles.title}>Newpod</div>
-          </div>
-          <div className={styles.titleHint}>红豆生南国，春来发几枝。愿君多采撷，此物最相思。</div>
-          <Form
-            form={form}
-            className={styles.form}
-            size='large'
-            layout='vertical'
-            onSubmit={onFinish}
-          >
-            <Form.Item field='userMark' className={styles.formItem}>
-              <Input
-                prefix={<IconTag />}
-                className={styles.formInput}
-                placeholder='账户备注(为空则随机生成)'
-              />
-            </Form.Item>
-            <Form.Item
-              field='userId'
-              rules={[
-                {
-                  required: true,
-                  message: '请输入你的SecretId!'
-                }
-              ]}
-              className={styles.formItem}
-            >
-              <Input
-                prefix={<IconUser />}
-                autoComplete='username'
-                className={styles.formInput}
-                placeholder='SecretId'
-              />
-            </Form.Item>
-            <Form.Item
-              field='userKey'
-              rules={[
-                {
-                  required: true,
-                  message: '请输入你的SecretKey!'
-                }
-              ]}
-              className={styles.formItem}
-            >
-              <Input
-                prefix={<IconLock />}
-                className={styles.formInput}
-                autoComplete='password'
-                type='password'
-                placeholder='SecretKey'
-              />
-            </Form.Item>
-            <Form.Item className={styles.formItem}>
-              <Button type='primary' htmlType='submit' className={styles.formSubmit}>
-                登录
-              </Button>
-            </Form.Item>
-          </Form>
+      <div className={styles.content}>
+        <div className={styles.titleLine}>
+          <div className={styles.icon} />
+          <div className={styles.title}>Newpod</div>
         </div>
-        <Footer />
+        <div className={styles.titleHint}>红豆生南国，春来发几枝。愿君多采撷，此物最相思。</div>
+        <Form
+          form={form}
+          className={styles.form}
+          size='large'
+          layout='vertical'
+          onSubmit={onFinish}
+        >
+          <Form.Item field='userMark' className={styles.formItem}>
+            <Input
+              prefix={<IconTag />}
+              className={styles.formInput}
+              placeholder='账户备注(为空则随机生成)'
+            />
+          </Form.Item>
+          <Form.Item
+            field='userId'
+            rules={[
+              {
+                required: true,
+                message: '请输入你的SecretId!'
+              }
+            ]}
+            className={styles.formItem}
+          >
+            <Input
+              prefix={<IconUser />}
+              autoComplete='username'
+              className={styles.formInput}
+              placeholder='SecretId'
+            />
+          </Form.Item>
+          <Form.Item
+            field='userKey'
+            rules={[
+              {
+                required: true,
+                message: '请输入你的SecretKey!'
+              }
+            ]}
+            className={styles.formItem}
+          >
+            <Input
+              prefix={<IconLock />}
+              className={styles.formInput}
+              autoComplete='password'
+              type='password'
+              placeholder='SecretKey'
+            />
+          </Form.Item>
+          <Form.Item className={styles.formItem}>
+            <Button type='primary' htmlType='submit' className={styles.formSubmit}>
+              登录
+            </Button>
+          </Form.Item>
+        </Form>
       </div>
+      <Footer middle />
     </div>
   );
 };

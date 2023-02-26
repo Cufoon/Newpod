@@ -1,10 +1,20 @@
 import styles from './index.scss';
 
-const Footer: React.FC = () => {
+const middleDescription: React.CSSProperties = {
+  textAlign: 'center'
+};
+
+const middleCopyright: React.CSSProperties = {
+  justifyContent: 'center'
+};
+
+const Footer: React.FC<{ middle?: boolean }> = ({ middle }) => {
   return (
     <footer className={styles.footer}>
-      <div className={styles.footerDescription}>A way to manage your dnspod.</div>
-      <div className={styles.footerCopyrightContainer}>
+      <div className={styles.footerDescription} style={middle ? middleDescription : undefined}>
+        A way to manage your dnspod.
+      </div>
+      <div className={styles.footerCopyrightContainer} style={middle ? middleCopyright : undefined}>
         <div className={styles.footerName}>Newpod</div>
         <div className={styles.footerCopyright}>
           <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 800 800'>
