@@ -26,17 +26,17 @@ module.exports = () => {
         }
       ]
     }),
-    new MiniCssExtractPlugin()
+    new MiniCssExtractPlugin(),
+    new HtmlWebpackPlugin({
+      filename: '[name].html',
+      template: env.PUBLIC_DIR('template.html')
+    })
   ];
   if (env.isDev()) {
     return result;
   }
   return [
     ...result,
-    new HtmlWebpackPlugin({
-      filename: '[name].html',
-      template: env.PUBLIC_DIR('template.html')
-    }),
     new ForkTsCheckerWebpackPlugin({
       typescript: {
         configFile: env.PROJECT_DIR('tsconfig.json')
