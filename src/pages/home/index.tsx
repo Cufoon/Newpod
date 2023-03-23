@@ -69,7 +69,7 @@ const HomePage: React.FC = () => {
                     className={styles.homeDomainLogo}
                     width={32}
                     height={32}
-                    src={`https://${item.Name}/favicon-32x32.png`}
+                    src={`https://${item.Name}/favicon.ico`}
                     error={
                       <img
                         style={{ background: '#000', borderRadius: '100%' }}

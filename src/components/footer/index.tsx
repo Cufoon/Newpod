@@ -28,15 +28,7 @@ const Footer: React.FC<{ middle?: boolean }> = ({ middle }) => {
             <circle cx='400' cy='400' r='320' fill='none' stroke='#fff' strokeWidth='80' />
           </svg>
         </div>
-        <div className={styles.footerLin1}>
-          <div className={styles.footerLin1Icon}></div>
-        </div>
-        <div className={styles.footerLin2}>
-          <div className={styles.footerLin2Icon}></div>
-        </div>
-        <div className={styles.footerLin3}>
-          <div className={styles.footerLin3Icon}></div>
-        </div>
+        <div className={styles.footerLin}>Cufoon</div>
       </div>
     </footer>
   );
