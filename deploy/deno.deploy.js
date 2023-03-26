@@ -1,5 +1,5 @@
-import { serve } from 'https://deno.land/std@0.178.0/http/server.ts';
-import { serveDir, serveFile } from 'https://deno.land/std@0.178.0/http/file_server.ts';
+import { serve } from 'https://deno.land/std@0.181.0/http/server.ts';
+import { serveDir, serveFile } from 'https://deno.land/std@0.181.0/http/file_server.ts';
 
 const setHeaders = (res) => {
   res.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
