@@ -1,14 +1,10 @@
-import { serve } from 'https://deno.land/std@0.182.0/http/server.ts';
-import { serveDir, serveFile } from 'https://deno.land/std@0.182.0/http/file_server.ts';
+import { serve } from 'https://deno.land/std@0.188.0/http/server.ts';
+import { serveDir, serveFile } from 'https://deno.land/std@0.188.0/http/file_server.ts';
 
 const setHeaders = (res) => {
   res.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
-  res.headers.set('X-XSS-Protection', '1; mode=block');
   res.headers.set('X-Content-Type-Options', 'nosniff');
-  res.headers.set(
-    'Content-Security-Policy',
-    "default-src 'self' http: https: ws: wss: data: blob: 'unsafe-inline'; frame-ancestors 'self'"
-  );
+  res.headers.set('Content-Security-Policy', "frame-ancestors 'self'");
   res.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   res.headers.set('Server', 'LitServer');
   res.headers.set('X-Cufoon-Request', `time=${Date.now()}`);
