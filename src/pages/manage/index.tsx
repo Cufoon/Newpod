@@ -273,6 +273,7 @@ const ManagePage: React.FC = () => {
       }
       setAddModalLoading(false);
       GlobalMessage.error('DomainName为空！');
+      return;
     } catch (e) {
       return e;
     }
@@ -313,6 +314,7 @@ const ManagePage: React.FC = () => {
       }
       setModifyModalLoading(false);
       GlobalMessage.error('DomainName或RecordToEdit为空！');
+      return;
     } catch (e) {
       return e;
     }
