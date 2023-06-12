@@ -23,8 +23,8 @@ module.exports = () => {
       automaticNameDelimiter: '.',
       chunks: 'all',
       hidePathInfo: true,
-      minSize: 17408,
-      maxSize: 535552,
+      minSize: 1048576,
+      maxSize: 4194304,
       minRemainingSize: 0,
       minChunks: 1,
       cacheGroups: {
