@@ -55,5 +55,9 @@ $border-radius-size: 12px;
         box-shadow: 0 8px 12px rgb(235, 237, 240);
       }
     }
+
+    &-modal {
+      max-width: 80vw;
+    }
   }
 }

@@ -41,6 +41,7 @@ const Nav: React.FC = () => {
       <Modal
         title='设置'
         visible={visible}
+        className={styles.appHeaderModal}
         onOk={() => setVisible(false)}
         onCancel={() => setVisible(false)}
         okText='确认'
