@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { Button, Form, Input, Modal, Radio, Select } from '@arco-design/web-react';
+import { Button, Form, Input, InputNumber, Modal, Radio, Select } from '@arco-design/web-react';
 import useCheckBeforeRender from '$hooks/useCheckBeforeRender';
 import { type Dnspod, DnspodAPI } from '$service/dnspod';
 import { createMessageLoading, GlobalMessage } from '$utils/message';
@@ -177,7 +177,7 @@ const ManagePage: React.FC = () => {
           GlobalMessage.success('状态修改成功');
           return;
         }
-        GlobalMessage.error('状态修改失败');
+        GlobalMessage.error(d?.Error.Message ?? '状态修改失败');
         return;
       }
       GlobalMessage.error('domainName为空！');
@@ -198,7 +198,7 @@ const ManagePage: React.FC = () => {
           GlobalMessage.success('删除成功');
           return;
         }
-        GlobalMessage.error('删除失败');
+        GlobalMessage.error(d?.Error.Message ?? '删除失败');
         return;
       }
       GlobalMessage.error('domainName为空！');
@@ -269,7 +269,9 @@ const ManagePage: React.FC = () => {
           setAddModalLoading(false);
           return;
         }
-        GlobalMessage.error('添加失败');
+        GlobalMessage.error(d?.Error.Message ?? '添加失败');
+        setAddModalLoading(false);
+        return;
       }
       setAddModalLoading(false);
       GlobalMessage.error('DomainName为空！');
@@ -310,7 +312,9 @@ const ManagePage: React.FC = () => {
           setModifyModalLoading(false);
           return;
         }
-        GlobalMessage.error('修改失败');
+        setModifyModalLoading(false);
+        GlobalMessage.error(d?.Error.Message ?? '修改失败');
+        return;
       }
       setModifyModalLoading(false);
       GlobalMessage.error('DomainName或RecordToEdit为空！');
@@ -418,13 +422,13 @@ const ManagePage: React.FC = () => {
               {(values) => {
                 return ['MX', 'HTTPS'].indexOf(values.recordType) > -1 ? (
                   <Form.Item label='优先级' field='recordMX' rules={[{ required: true }]}>
-                    <Input type='number' placeholder='' />
+                    <InputNumber precision={0} hideControl />
                   </Form.Item>
                 ) : null;
               }}
             </Form.Item>
             <Form.Item label='TTL' field='recordTTL' rules={[{ required: true }]}>
-              <Input type='number' placeholder='' />
+              <InputNumber precision={0} hideControl />
             </Form.Item>
           </Form>
         </Modal>
@@ -477,13 +481,13 @@ const ManagePage: React.FC = () => {
               {(values) => {
                 return ['MX', 'HTTPS'].indexOf(values.recordType) > -1 ? (
                   <Form.Item label='优先级' field='recordMX' rules={[{ required: true }]}>
-                    <Input type='number' placeholder='' />
+                    <InputNumber precision={0} hideControl />
                   </Form.Item>
                 ) : null;
               }}
             </Form.Item>
             <Form.Item label='TTL' field='recordTTL' rules={[{ required: true }]}>
-              <Input type='number' placeholder='' />
+              <InputNumber precision={0} hideControl />
             </Form.Item>
           </Form>
           <Button type='default' onClick={resetModifyForm}>
