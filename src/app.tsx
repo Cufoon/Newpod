@@ -1,23 +1,14 @@
 import { useEffect, useState } from 'react';
-import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import Footer from '$components/footer';
 import Navbar from '$components/nav';
 import { getCurrentAccount } from '$service/account';
-import { GlobalMessage } from '$utils/message';
 
 import styles from './app.scss';
 
 const App: React.FC = () => {
   const [init, setInit] = useState(false);
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-
-  useEffect(() => {
-    const isFromYWYJ = searchParams.getAll('utm_source').includes('xinquji');
-    if (isFromYWYJ) {
-      GlobalMessage.info('欢迎来自一网一匠的同学！');
-    }
-  }, []);
 
   useEffect(() => {
     let living = true;

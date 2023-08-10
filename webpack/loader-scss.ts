@@ -1,5 +1,8 @@
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const env = require('./env');
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import env from './env';
+
+import type { LoadersType } from './types';
+
 
 const cssModuleLoader = () => ({
   loader: 'css-loader',
@@ -7,7 +10,9 @@ const cssModuleLoader = () => ({
     modules: {
       mode: 'local',
       exportGlobals: true,
-      localIdentName: env.isDev() ? '[path][name]__[local]' : '[hash:base64:12]',
+      localIdentName: env.isDev()
+        ? '[path][name]__[local]'
+        : '[hash:base64:12]',
       localIdentContext: env.SOURCE_DIR(),
       localIdentHashFunction: 'sha512',
       localIdentHashSalt: 'cufoon-hash',
@@ -17,7 +22,7 @@ const cssModuleLoader = () => ({
   }
 });
 
-module.exports = () => [
+const makeScssLoader = (): LoadersType => [
   {
     test: /\.css$/i,
     resourceQuery: { not: [/inline/] },
@@ -77,3 +82,5 @@ module.exports = () => [
     ]
   }
 ];
+
+export default makeScssLoader;

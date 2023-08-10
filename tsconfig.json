@@ -61,14 +61,12 @@
       ]
     }
   },
-  "include": [
-    "src/**/*",
-    "typings/*",
-    "global.d.ts"
-  ],
   "exclude": [
-    "node_modules",
-    "config",
-    "build"
-  ]
+    ".eslintrc.js"
+  ],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  }
 }

@@ -1,6 +1,7 @@
-const env = require('./env');
+import env from './env';
 
-module.exports = () => ({
+
+export default () => ({
   $assets: env.SOURCE_DIR('assets'),
   $components: env.SOURCE_DIR('components'),
   $hooks: env.SOURCE_DIR('hooks'),

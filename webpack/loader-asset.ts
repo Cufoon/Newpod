@@ -1,9 +1,12 @@
-const json5 = require('json5');
-const toml = require('toml');
-const yaml = require('yamljs');
-const svgToMiniDataURI = require('mini-svg-data-uri');
+import json5 from 'json5';
+import toml from 'toml';
+import yaml from 'yamljs';
+import svgToMiniDataURI from 'mini-svg-data-uri';
 
-module.exports = () => [
+import type { LoadersType } from './types';
+
+
+const makeAssetLoader = (): LoadersType => [
   {
     test: /\.(png|jpg|jpeg|gif|webp)$/i,
     type: 'asset/resource'
@@ -18,7 +21,7 @@ module.exports = () => [
     type: 'asset/inline',
     resourceQuery: { not: [/raw/] },
     generator: {
-      dataUrl: (content) => {
+      dataUrl: (content: string) => {
         content = content.toString();
         return svgToMiniDataURI(content);
       }
@@ -50,3 +53,5 @@ module.exports = () => [
     }
   }
 ];
+
+export default makeAssetLoader;

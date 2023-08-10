@@ -1,13 +1,20 @@
-const tsLoader = require('./loader.ts');
-const scssLoader = require('./loader.scss');
-const assetLoader = require('./loader.asset');
-const env = require('./env');
-const plugin = require('./plugin');
-const pathAlias = require('./alias');
-const optimization = require('./optimization');
-const fallback = require('./fallback');
+import webpack from 'webpack';
+import tsLoader from './webpack/loader-ts';
+import scssLoader from './webpack/loader-scss';
+import assetLoader from './webpack/loader-asset';
+import env from './webpack/env';
+import plugin from './webpack/plugin';
+import pathAlias from './webpack/alias';
+import optimization from './webpack/optimization';
+import fallback from './webpack/fallback';
 
-module.exports = ({ isDev }) => {
+interface ConfigBaseParams {
+  isDev: boolean;
+}
+
+type ConfigBaseFunc = (p: ConfigBaseParams) => webpack.Configuration;
+
+const configBase: ConfigBaseFunc = ({ isDev }) => {
   if (isDev) {
     env.setMode(env.MODE.DEV);
   }
@@ -55,11 +62,11 @@ module.exports = ({ isDev }) => {
       liveReload: true,
       port: 2233,
       proxy: {
-        '/api': {
+        '/newpod/api': {
           target: 'https://dnspod.tencentcloudapi.com/',
           secure: false,
           changeOrigin: true,
-          pathRewrite: { '^/api': '' },
+          pathRewrite: { '^/newpod/api': '' },
           headers: {
             host: 'dnspod.tencentcloudapi.com',
             'content-type': 'application/json; charset=utf-8'
@@ -74,3 +81,5 @@ module.exports = ({ isDev }) => {
     devtool: isDev ? 'eval-source-map' : false
   };
 };
+
+export default configBase;

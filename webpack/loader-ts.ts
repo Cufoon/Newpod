@@ -1,4 +1,7 @@
-module.exports = () => [
+import type { LoadersType } from './types';
+
+
+const makeTsLoader = (): LoadersType => [
   {
     test: /\.tsx?$/,
     exclude: /node_modules/,
@@ -28,3 +31,5 @@ module.exports = () => [
     ]
   }
 ];
+
+export default makeTsLoader;

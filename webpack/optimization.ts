@@ -1,8 +1,12 @@
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const HtmlMinimizerPlugin = require('html-minimizer-webpack-plugin');
-const env = require('./env');
+import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
+import HtmlMinimizerPlugin from 'html-minimizer-webpack-plugin';
 
-module.exports = () => {
+import env from './env';
+
+import type { OptimizationType } from './types';
+
+
+const makeOptimizationConfigure = (): OptimizationType => {
   console.log('optimization.js', 'isDev', env.isDev());
   if (env.isDev()) {
     return {};
@@ -44,3 +48,5 @@ module.exports = () => {
     }
   };
 };
+
+export default makeOptimizationConfigure;

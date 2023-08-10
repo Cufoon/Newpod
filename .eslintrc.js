@@ -1,14 +1,25 @@
 module.exports = {
   env: {
     browser: true,
-    es2021: true,
-    node: true
+    es2021: true
   },
+  root: true,
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
     'prettier'
+  ],
+  overrides: [
+    {
+      env: {
+        node: true
+      },
+      files: ['.eslintrc.{js,cjs}'],
+      parserOptions: {
+        sourceType: 'script'
+      }
+    }
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -18,7 +29,7 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module'
   },
-  plugins: ['@typescript-eslint', 'react', 'prettier'],
+  plugins: ['@typescript-eslint', 'react'],
   rules: {
     semi: ['error', 'always'],
     '@typescript-eslint/no-explicit-any': 'off',
@@ -27,6 +38,5 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'react/jsx-uses-react': 'off',
     'react/prop-types': 'off'
-  },
-  root: true
+  }
 };

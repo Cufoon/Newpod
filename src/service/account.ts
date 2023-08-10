@@ -1,4 +1,4 @@
-import storage from '$src/utils/storage';
+import storage from '../utils/storage';
 
 interface Account {
   id: string;
