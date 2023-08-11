@@ -6,12 +6,12 @@ import TerserPlugin from 'terser-webpack-plugin';
 import webpack from 'webpack';
 
 import env from './env';
+import appSetting from '../.apprc';
 
 import type { PluginsType } from './types';
 
-
 const makePlugins = (): PluginsType => {
-  console.log('plugin.js', 'isDev', env.isDev());
+  console.log('plugins', 'isDev', env.isDev());
   const result = [
     new CopyPlugin({
       patterns: [
@@ -22,7 +22,7 @@ const makePlugins = (): PluginsType => {
           globOptions: {
             dot: true,
             gitignore: true,
-            ignore: ['**/template.html', '**/template-dev.html']
+            ignore: ['**/template.hbs', '**/template-dev.hbs']
           },
           noErrorOnMissing: true
         }
@@ -31,7 +31,8 @@ const makePlugins = (): PluginsType => {
     new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
       filename: '[name].html',
-      template: env.PUBLIC_DIR('template.html')
+      template: env.PUBLIC_DIR('template.hbs'),
+      publicPath: appSetting.subPath
     })
   ];
   if (env.isDev()) {

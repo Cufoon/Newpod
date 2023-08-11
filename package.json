@@ -4,7 +4,7 @@
   "description": "react web app",
   "main": "src/root.tsx",
   "scripts": {
-    "build": "webpack build --config webpack.prod.ts",
+    "build": "node script/clean.js && webpack build --config webpack.prod.ts",
     "start": "webpack serve --config webpack.dev.ts",
     "watch": "webpack --watch --config webpack.dev.ts"
   },
@@ -56,6 +56,7 @@
     "eslint-config-prettier": "9.0.0",
     "eslint-plugin-react": "7.33.1",
     "fork-ts-checker-webpack-plugin": "8.0.0",
+    "handlebars-loader": "1.7.3",
     "html-minimizer-webpack-plugin": "4.4.0",
     "html-webpack-plugin": "5.5.3",
     "json5": "2.2.3",

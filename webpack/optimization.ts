@@ -7,7 +7,7 @@ import type { OptimizationType } from './types';
 
 
 const makeOptimizationConfigure = (): OptimizationType => {
-  console.log('optimization.js', 'isDev', env.isDev());
+  console.log('optimization', 'isDev', env.isDev());
   if (env.isDev()) {
     return {};
   }

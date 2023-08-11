@@ -7,6 +7,7 @@ import plugin from './webpack/plugin';
 import pathAlias from './webpack/alias';
 import optimization from './webpack/optimization';
 import fallback from './webpack/fallback';
+import appSetting from './.apprc';
 
 interface ConfigBaseParams {
   isDev: boolean;
@@ -62,11 +63,11 @@ const configBase: ConfigBaseFunc = ({ isDev }) => {
       liveReload: true,
       port: 2233,
       proxy: {
-        '/newpod/api': {
+        [`${appSetting.subPath}/api`]: {
           target: 'https://dnspod.tencentcloudapi.com/',
           secure: false,
           changeOrigin: true,
-          pathRewrite: { '^/newpod/api': '' },
+          pathRewrite: { [`^${appSetting.subPath}/api`]: '' },
           headers: {
             host: 'dnspod.tencentcloudapi.com',
             'content-type': 'application/json; charset=utf-8'

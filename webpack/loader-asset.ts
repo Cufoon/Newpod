@@ -5,7 +5,6 @@ import svgToMiniDataURI from 'mini-svg-data-uri';
 
 import type { LoadersType } from './types';
 
-
 const makeAssetLoader = (): LoadersType => [
   {
     test: /\.(png|jpg|jpeg|gif|webp)$/i,
@@ -51,7 +50,16 @@ const makeAssetLoader = (): LoadersType => [
     parser: {
       parse: json5.parse
     }
-  }
+  },
+  {
+    test: /\.apprc$/i,
+    type: 'json',
+    parser: {
+      parse: json5.parse
+    }
+  },
+  { test: /\.handlebars$/, loader: 'handlebars-loader' },
+  { test: /\.hbs$/, loader: 'handlebars-loader' }
 ];
 
 export default makeAssetLoader;
