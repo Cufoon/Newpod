@@ -35,14 +35,14 @@
     /* Completeness */
     "skipLibCheck": true,
     "paths": {
-      "$assets/*": ["src/assets/*"],
-      "$components/*": ["src/components/*"],
-      "$hooks/*": ["src/hooks/*"],
-      "$pages/*": ["src/pages/*"],
-      "$service/*": ["src/service/*"],
-      "$src/*": ["src/*"],
-      "$store/*": ["src/store/*"],
-      "$utils/*": ["src/utils/*"]
+      "$assets/*": ["./src/assets/*"],
+      "$components/*": ["./src/components/*"],
+      "$hooks/*": ["./src/hooks/*"],
+      "$pages/*": ["./src/pages/*"],
+      "$service/*": ["./src/service/*"],
+      "$src/*": ["./src/*"],
+      "$store/*": ["./src/store/*"],
+      "$utils/*": ["./src/utils/*"]
     }
   },
   "include": ["src/**/*", "webpack/**/*", "*.ts"],

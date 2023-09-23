@@ -1,34 +1,106 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#f0f0f0">
-  <meta name="msapplication-TileColor" content="#000000">
-  <link rel="apple-touch-icon" sizes="180x180" href="{{htmlWebpackPlugin.options.publicPath}}/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="{{htmlWebpackPlugin.options.publicPath}}/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="{{htmlWebpackPlugin.options.publicPath}}/favicon-16x16.png">
-  <link rel="mask-icon" href="{{htmlWebpackPlugin.options.publicPath}}/safari-pinned-tab.svg" color="#000000">
-  <link rel="shortcut icon" type="image/x-icon" href="{{htmlWebpackPlugin.options.publicPath}}/favicon.ico">
-  <title>Newpod</title>
-</head>
-
-<body>
-  <div id="app"></div>
-  <div id="global-message"></div>
-  <!-- <script>
-    window.addEventListener('load', () => {
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js').then(() => {
-          console.log('Service worker registered!');
-        }).catch((error) => {
-          console.warn('Error registering service worker:');
-          console.warn(error);
-        });
+<html lang='zh-CN'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+    <meta name='theme-color' content='#f0f0f0' />
+    <meta name='msapplication-TileColor' content='#000000' />
+    <link rel='apple-touch-icon' sizes='180x180' href='{{htmlWebpackPlugin.options.publicPath}}/apple-touch-icon.png' />
+    <link rel='icon' type='image/png' sizes='32x32' href='{{htmlWebpackPlugin.options.publicPath}}/favicon-32x32.png' />
+    <link rel='icon' type='image/png' sizes='16x16' href='{{htmlWebpackPlugin.options.publicPath}}/favicon-16x16.png' />
+    <link rel='mask-icon' href='{{htmlWebpackPlugin.options.publicPath}}/safari-pinned-tab.svg' color='#000000' />
+    <link rel='shortcut icon' type='image/x-icon' href='{{htmlWebpackPlugin.options.publicPath}}/favicon.ico' />
+    <title>Newpod</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        background: rgb(240, 240, 240);
       }
-    });
-  </script> -->
-</body>
-
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <style>
+        @keyframes rotateAni {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+        @keyframes transAni {
+          0% {
+            opacity: 0;
+          }
+          100% {
+            opacity: 1;
+          }
+        }
+        .rotateAnimate {
+          animation: rotateAni 2000ms cubic-bezier(1, 0.17, 0.34, 0.97) 500ms
+            infinite forwards;
+        }
+        .loadingWrapper {
+          opacity: 0;
+          animation: transAni 50ms ease-in-out 450ms forwards;
+          width: 100%;
+          min-height: 99vh;
+          box-sizing: border-box;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        .loadingOuter {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          position: relative;
+          width: 32px;
+          height: 32px;
+          box-sizing: border-box;
+          transition: all 600ms;
+        }
+        .loading {
+          position: relative;
+          width: 32px;
+          height: 32px;
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+          border-radius: 50%;
+          background-color: hsl(0, 0%, 100%);
+          box-shadow: 0 0 30px rgba(0, 0, 0, 0.05);
+        }
+        .loading::before {
+          content: '';
+          position: absolute;
+          top: 4px;
+          left: 11px;
+          width: 11px;
+          height: 8px;
+          border-radius: 5px;
+          background-color: hsl(0, 0%, 85%);
+        }
+        .tipText {
+          font-size: 32px;
+          line-height: 32px;
+          padding-right: 12px;
+          font-weight: bolder;
+          color: #fff;
+          text-shadow: rgba(0, 0, 0, 0.1) 1px 1px 15px;
+        }
+      </style>
+      <div class="loadingWrapper">
+        <div class="tipText">LOADING</div>
+        <div class="loadingOuter">
+          <div class="loading rotateAnimate"></div>
+        </div>
+      </div>
+    </div>
+    <div id='global-message'></div>
+  </body>
 </html>

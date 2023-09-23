@@ -1,6 +1,5 @@
 import env from './env';
 
-
 export default () => ({
   $assets: env.SOURCE_DIR('assets'),
   $components: env.SOURCE_DIR('components'),

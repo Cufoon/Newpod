@@ -49,9 +49,9 @@ class MessageLoading {
   }
 }
 
-export const createMessageLoading = (delay = 300) => {
+export const createMessageLoading = (delay = 1000) => {
   if (delay === undefined) {
-    delay = 300;
+    delay = 1000;
   } else {
     if (delay < 20) {
       delay = 20;
@@ -60,7 +60,9 @@ export const createMessageLoading = (delay = 300) => {
   return new MessageLoading(delay);
 };
 
-const convertMessageFunc = (fn: (config: string | MessageProps) => CloserType) => {
+const convertMessageFunc = (
+  fn: (config: string | MessageProps) => CloserType
+) => {
   return (content: string | JSX.Element, duration = 2000) => {
     return fn({
       content,

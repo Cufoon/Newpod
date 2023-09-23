@@ -5,7 +5,6 @@ import env from './env';
 
 import type { OptimizationType } from './types';
 
-
 const makeOptimizationConfigure = (): OptimizationType => {
   console.log('optimization', 'isDev', env.isDev());
   if (env.isDev()) {
@@ -27,8 +26,8 @@ const makeOptimizationConfigure = (): OptimizationType => {
       automaticNameDelimiter: '.',
       chunks: 'all',
       hidePathInfo: true,
-      minSize: 1048576,
-      maxSize: 4194304,
+      minSize: 520000,
+      maxSize: 920000,
       minRemainingSize: 0,
       minChunks: 1,
       cacheGroups: {

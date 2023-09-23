@@ -1,6 +1,5 @@
 import path from 'node:path';
 
-
 const createPath = (p: string) => (child?: string) => {
   if (child) {
     return path.resolve(p, child);

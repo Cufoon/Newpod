@@ -1,6 +1,5 @@
 import type { LoadersType } from './types';
 
-
 const makeTsLoader = (): LoadersType => [
   {
     test: /\.tsx?$/,

@@ -1,13 +1,14 @@
 import React from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { RouterProvider, createHashRouter } from 'react-router-dom';
 import ForbiddenPage from '$pages/forbidden';
 import HomePage from '$pages/home';
 import LoginPage from '$pages/login';
 import App from './app';
 import ManagePage from '$pages/manage';
 import ManageRedirect from '$pages/manage/redirect';
+import appSetting from '$src/../config';
 
-const router = createBrowserRouter(
+const router = createHashRouter(
   [
     {
       path: '/',
@@ -49,7 +50,7 @@ const router = createBrowserRouter(
     }
   ],
   {
-    basename: '/newpod'
+    basename: appSetting.subPath
   }
 );
 

@@ -30,7 +30,8 @@ library.add(
   faSpinner
 );
 
-const globalMessageContainer = document.getElementById('global-message') || document.body;
+const globalMessageContainer =
+  document.getElementById('global-message') || document.body;
 
 Message.config({
   maxCount: 3,

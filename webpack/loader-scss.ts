@@ -3,7 +3,6 @@ import env from './env';
 
 import type { LoadersType } from './types';
 
-
 const cssModuleLoader = () => ({
   loader: 'css-loader',
   options: {

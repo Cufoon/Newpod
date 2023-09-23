@@ -1,3 +1,3 @@
-import appSetting from '$src/../.apprc';
+import appSetting from '$src/../config';
 
 export const backendForDnspodURL = `${appSetting.subPath}/api`;

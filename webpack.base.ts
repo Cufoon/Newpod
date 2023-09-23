@@ -7,7 +7,7 @@ import plugin from './webpack/plugin';
 import pathAlias from './webpack/alias';
 import optimization from './webpack/optimization';
 import fallback from './webpack/fallback';
-import appSetting from './.apprc';
+import appSetting from './config';
 
 interface ConfigBaseParams {
   isDev: boolean;

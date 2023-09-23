@@ -3,7 +3,7 @@ interface AppSetting {
 }
 
 const appSetting: AppSetting = {
-  subPath: '/newpod'
+  subPath: ''
 };
 
 export default appSetting;
