@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './index.scss';
 
 interface Props {
-  status: string;
+  status: string | undefined;
 }
 
 const Index: React.FC<Props> = ({ status }) => {

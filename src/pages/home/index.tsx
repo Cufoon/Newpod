@@ -9,7 +9,8 @@ import styles from './index.scss';
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
-  const [domainCountInfo, setDomainCountInfo] = useState<Dnspod.DomainCountInfo>();
+  const [domainCountInfo, setDomainCountInfo] =
+    useState<Dnspod.DomainCountInfo>();
   const [domainList, setDomainList] = useState<Dnspod.DomainListItem[]>([]);
   const getDomainList = async () => {
     const msl = createMessageLoading();
@@ -82,15 +83,24 @@ const HomePage: React.FC = () => {
                   />
                 </div>
                 <InfoLine title={'Punycode'} content={item.Punycode} />
-                <InfoLine title={'NS状态'} content={(item.DNSStatus && '状态错误') || '状态正常'} />
-                {item.EffectiveDNS.map((ii, idx) => {
-                  return <InfoLine key={ii} title={`DNS服务器${idx + 1}`} content={ii} />;
+                <InfoLine
+                  title={'NS状态'}
+                  content={(item.DNSStatus && '状态错误') || '状态正常'}
+                />
+                {item.EffectiveDNS?.map((ii, idx) => {
+                  return (
+                    <InfoLine
+                      key={ii}
+                      title={`DNS服务器${idx + 1}`}
+                      content={ii}
+                    />
+                  );
                 })}
                 <InfoLine title={'记录总数'} content={item.RecordCount} />
                 <InfoLine title={'最后更新时间'} content={item.UpdatedOn} />
-                <div style={{ width: '100%', color: 'rgb(136, 136, 136)' }}>{`备注：${
-                  item.Remark || '你没有留备注'
-                }`}</div>
+                <div
+                  style={{ width: '100%', color: 'rgb(136, 136, 136)' }}
+                >{`备注：${item.Remark || '你没有留备注'}`}</div>
                 <div className={styles.homeDomainStatusLine}>
                   <Status status={item.Status} />
                 </div>

@@ -1,8 +1,8 @@
 import styles from './info-line.scss';
 
 interface Props {
-  title: string | number | JSX.Element;
-  content: string | number | JSX.Element;
+  title: any;
+  content: any;
 }
 
 const Index: React.FC<Props> = ({ title, content }) => {

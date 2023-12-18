@@ -1,6 +1,6 @@
 {
   "name": "newpod",
-  "version": "2023.09.23",
+  "version": "2023.12.18",
   "description": "react web app",
   "main": "src/root.tsx",
   "scripts": {
