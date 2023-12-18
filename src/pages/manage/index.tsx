@@ -1,6 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { Button, Form, Input, InputNumber, Modal, Radio, Select } from '@arco-design/web-react';
+import {
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  Radio,
+  Select
+} from '@arco-design/web-react';
 import useCheckBeforeRender from '$hooks/useCheckBeforeRender';
 import { type Dnspod, DnspodAPI } from '$service/dnspod';
 import { createMessageLoading, GlobalMessage } from '$utils/message';
@@ -8,7 +16,11 @@ import styles from './index.scss';
 import { getDottedRoot } from '$utils/util';
 import RecordLine from '$pages/manage/record';
 import WaterFall from '$components/waterfall';
-import { recordListSorter } from '$pages/manage/util';
+import {
+  isEmailRecord,
+  notExceptedSubDomain,
+  recordListSorter
+} from '$pages/manage/util';
 import { IconLoading, IconRefresh } from '@arco-design/web-react/icon';
 
 interface FormData {
@@ -26,8 +38,11 @@ const ManagePage: React.FC = () => {
   const [doCheck, Wrapper] = useCheckBeforeRender();
   const { domainName } = useParams();
   const [searchQuery, setSearchQuery] = useSearchParams();
-  const [originRecordList, setOriginRecordList] = useState<Dnspod.RecordListItem[]>();
-  const [subDomain, setSubDomain] = useState(searchQuery.get('subDomain') || '');
+  const [originRecordList, setOriginRecordList] =
+    useState<Dnspod.RecordListItem[]>();
+  const [subDomain, setSubDomain] = useState(
+    searchQuery.get('subDomain') || ''
+  );
   const [init, setInit] = useState(false);
 
   const recordList = useMemo<Dnspod.RecordListItem[]>(() => {
@@ -36,10 +51,44 @@ const ManagePage: React.FC = () => {
     }
     let result: Dnspod.RecordListItem[] = [];
     if (originRecordList !== undefined) {
+      if (subDomain === 'cufoon-newpod-mail-service') {
+        for (const recordListItem of originRecordList) {
+          if (
+            isEmailRecord(
+              recordListItem.Name,
+              recordListItem.Type,
+              recordListItem.Value
+            )
+          ) {
+            result = result.concat([recordListItem]);
+          }
+        }
+        return result;
+      }
+      if (subDomain === 'cufoon-newpod-cert-application') {
+        for (const recordListItem of originRecordList) {
+          const tmp = recordListItem.Name.split('.');
+          if (tmp.length > 0 && tmp[0] === '_acme-challenge') {
+            result = result.concat([recordListItem]);
+          }
+        }
+        return result;
+      }
       for (const recordListItem of originRecordList) {
         const tmp = recordListItem.Name.split('.');
-        if (tmp.length > 0 && tmp[tmp.length - 1] === subDomain) {
-          result = result.concat([recordListItem]);
+        if (tmp.length > 0) {
+          const tmpSubDomain = tmp[tmp.length - 1];
+          if (
+            tmpSubDomain === subDomain &&
+            !isEmailRecord(
+              tmpSubDomain,
+              recordListItem.Type,
+              recordListItem.Value
+            ) &&
+            notExceptedSubDomain(tmpSubDomain)
+          ) {
+            result = result.concat([recordListItem]);
+          }
         }
       }
     }
@@ -47,7 +96,13 @@ const ManagePage: React.FC = () => {
   }, [originRecordList, subDomain]);
 
   useEffect(() => {
-    if (init && recordList.length === 0 && subDomain !== '') {
+    if (
+      init &&
+      recordList.length === 0 &&
+      subDomain !== '' &&
+      subDomain !== '@' &&
+      notExceptedSubDomain(subDomain)
+    ) {
       changeSubdomain('');
     }
   }, [recordList, subDomain, init]);
@@ -56,15 +111,22 @@ const ManagePage: React.FC = () => {
     let nowProcessedSubdomain: string[] = ['', '@'];
     let result: { label: string; value: string; disabled?: boolean }[] = [
       { label: '全部', value: '' },
-      { label: '主域名', value: '@' }
+      { label: '主域名', value: '@' },
+      { label: '邮箱', value: 'cufoon-newpod-mail-service' },
+      { label: '证书', value: 'cufoon-newpod-cert-application' }
     ];
     if (originRecordList === undefined) {
-      return result.concat([{ label: '子域名加载中...', value: '.', disabled: true }]);
+      return result.concat([
+        { label: '子域名加载中...', value: '.', disabled: true }
+      ]);
     }
     if (originRecordList.length > 0) {
       for (const item of originRecordList) {
         const root = getDottedRoot(item.Name);
-        if (nowProcessedSubdomain.indexOf(root) < 0) {
+        if (
+          notExceptedSubDomain(root) &&
+          nowProcessedSubdomain.indexOf(root) < 0
+        ) {
           nowProcessedSubdomain = nowProcessedSubdomain.concat([root]);
           result = result.concat([{ label: root, value: root }]);
         }
@@ -74,7 +136,10 @@ const ManagePage: React.FC = () => {
         [result[2], result[wwwIdx]] = [result[wwwIdx] as any, result[2] as any];
       }
     }
-    return [...result.slice(0, 3), ...result.slice(3).sort((a, b) => (a.value > b.value ? 1 : -1))];
+    return [
+      ...result.slice(0, 3),
+      ...result.slice(3).sort((a, b) => (a.value > b.value ? 1 : -1))
+    ];
   }, [originRecordList]);
 
   useEffect(() => {
@@ -124,7 +189,10 @@ const ManagePage: React.FC = () => {
         return;
       }
       if (d?.DomainInfo) {
-        setAddModalFormData((prev: any) => ({ ...prev, recordTTL: d.DomainInfo?.TTL || 600 }));
+        setAddModalFormData((prev: any) => ({
+          ...prev,
+          recordTTL: d.DomainInfo?.TTL || 600
+        }));
       }
     }
   };
@@ -188,7 +256,10 @@ const ManagePage: React.FC = () => {
   const deleteRecord = useCallback(
     async (id: number) => {
       if (domainName) {
-        const [d, e] = await DnspodAPI.deleteRecord({ Domain: domainName, RecordId: id });
+        const [d, e] = await DnspodAPI.deleteRecord({
+          Domain: domainName,
+          RecordId: id
+        });
         if (e) {
           GlobalMessage.error(e);
           return;
@@ -227,7 +298,12 @@ const ManagePage: React.FC = () => {
   }, []);
 
   const renderWaterFall = useMemo(
-    () => <WaterFall<Dnspod.RecordListItem> dataSource={recordList} render={renderItem} />,
+    () => (
+      <WaterFall<Dnspod.RecordListItem>
+        dataSource={recordList}
+        render={renderItem}
+      />
+    ),
     [recordList, renderItem]
   );
 
@@ -392,10 +468,19 @@ const ManagePage: React.FC = () => {
               style: { flexBasis: 'calc(100% - 90px)' }
             }}
           >
-            <Form.Item label='主机记录' field='subDomain' rules={[{ required: true }]}>
+            <Form.Item
+              label='主机记录'
+              field='subDomain'
+              rules={[{ required: true }]}
+            >
               <Input placeholder='' defaultValue={subDomain} />
             </Form.Item>
-            <Form.Item label='记录类型' required field='recordType' rules={[{ required: true }]}>
+            <Form.Item
+              label='记录类型'
+              required
+              field='recordType'
+              rules={[{ required: true }]}
+            >
               <Select
                 options={[
                   'A',
@@ -412,22 +497,40 @@ const ManagePage: React.FC = () => {
                 ]}
               />
             </Form.Item>
-            <Form.Item label='线路' disabled required field='line' rules={[{ required: true }]}>
+            <Form.Item
+              label='线路'
+              disabled
+              required
+              field='line'
+              rules={[{ required: true }]}
+            >
               <Select options={['默认']} />
             </Form.Item>
-            <Form.Item label='记录值' field='recordValue' rules={[{ required: true }]}>
+            <Form.Item
+              label='记录值'
+              field='recordValue'
+              rules={[{ required: true }]}
+            >
               <Input placeholder='' />
             </Form.Item>
             <Form.Item noStyle shouldUpdate>
               {(values) => {
                 return ['MX', 'HTTPS'].indexOf(values.recordType) > -1 ? (
-                  <Form.Item label='优先级' field='recordMX' rules={[{ required: true }]}>
+                  <Form.Item
+                    label='优先级'
+                    field='recordMX'
+                    rules={[{ required: true }]}
+                  >
                     <InputNumber precision={0} hideControl />
                   </Form.Item>
                 ) : null;
               }}
             </Form.Item>
-            <Form.Item label='TTL' field='recordTTL' rules={[{ required: true }]}>
+            <Form.Item
+              label='TTL'
+              field='recordTTL'
+              rules={[{ required: true }]}
+            >
               <InputNumber precision={0} hideControl />
             </Form.Item>
           </Form>
@@ -451,10 +554,19 @@ const ManagePage: React.FC = () => {
               style: { flexBasis: 'calc(100% - 90px)' }
             }}
           >
-            <Form.Item label='主机记录' field='subDomain' rules={[{ required: true }]}>
+            <Form.Item
+              label='主机记录'
+              field='subDomain'
+              rules={[{ required: true }]}
+            >
               <Input placeholder='' defaultValue={subDomain} />
             </Form.Item>
-            <Form.Item label='记录类型' required field='recordType' rules={[{ required: true }]}>
+            <Form.Item
+              label='记录类型'
+              required
+              field='recordType'
+              rules={[{ required: true }]}
+            >
               <Select
                 options={[
                   'A',
@@ -471,22 +583,40 @@ const ManagePage: React.FC = () => {
                 ]}
               />
             </Form.Item>
-            <Form.Item label='线路' disabled required field='line' rules={[{ required: true }]}>
+            <Form.Item
+              label='线路'
+              disabled
+              required
+              field='line'
+              rules={[{ required: true }]}
+            >
               <Select options={['默认']} />
             </Form.Item>
-            <Form.Item label='记录值' field='recordValue' rules={[{ required: true }]}>
+            <Form.Item
+              label='记录值'
+              field='recordValue'
+              rules={[{ required: true }]}
+            >
               <Input placeholder='' />
             </Form.Item>
             <Form.Item noStyle shouldUpdate>
               {(values) => {
                 return ['MX', 'HTTPS'].indexOf(values.recordType) > -1 ? (
-                  <Form.Item label='优先级' field='recordMX' rules={[{ required: true }]}>
+                  <Form.Item
+                    label='优先级'
+                    field='recordMX'
+                    rules={[{ required: true }]}
+                  >
                     <InputNumber precision={0} hideControl />
                   </Form.Item>
                 ) : null;
               }}
             </Form.Item>
-            <Form.Item label='TTL' field='recordTTL' rules={[{ required: true }]}>
+            <Form.Item
+              label='TTL'
+              field='recordTTL'
+              rules={[{ required: true }]}
+            >
               <InputNumber precision={0} hideControl />
             </Form.Item>
           </Form>

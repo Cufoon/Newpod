@@ -1,6 +1,9 @@
 import { Dnspod } from '$service/dnspod';
 
-const commonSorterType = (a: Dnspod.RecordListItem, b: Dnspod.RecordListItem) => {
+const commonSorterType = (
+  a: Dnspod.RecordListItem,
+  b: Dnspod.RecordListItem
+) => {
   if (a.Type === 'NS') {
     if (b.Type === 'NS') return commonSorterRest(a, b);
     return -1;
@@ -26,7 +29,10 @@ const commonSorterType = (a: Dnspod.RecordListItem, b: Dnspod.RecordListItem) =>
   return commonSorterRest(a, b);
 };
 
-const commonSorterRest = (a: Dnspod.RecordListItem, b: Dnspod.RecordListItem) => {
+const commonSorterRest = (
+  a: Dnspod.RecordListItem,
+  b: Dnspod.RecordListItem
+) => {
   if (a.Weight < b.Weight) return -1;
   if (a.Weight > b.Weight) return 1;
   if (a.Value < b.Value) return -1;
@@ -34,7 +40,10 @@ const commonSorterRest = (a: Dnspod.RecordListItem, b: Dnspod.RecordListItem) =>
   return 0;
 };
 
-export const recordListSorter = (a: Dnspod.RecordListItem, b: Dnspod.RecordListItem) => {
+export const recordListSorter = (
+  a: Dnspod.RecordListItem,
+  b: Dnspod.RecordListItem
+) => {
   if (a.Status === 'DISABLE') {
     if (b.Status === 'DISABLE') return commonSorterType(a, b);
     return 1;
@@ -53,4 +62,30 @@ export const recordListSorter = (a: Dnspod.RecordListItem, b: Dnspod.RecordListI
   if (a.Name < b.Name) return -1;
   if (a.Name > b.Name) return 1;
   return commonSorterType(a, b);
+};
+
+const exceptedDomains: { [index: string]: boolean } = {
+  _domainkey: true,
+  ['_acme-challenge']: true,
+  ['cufoon-newpod-mail-service']: true,
+  ['cufoon-newpod-cert-application']: true
+};
+
+export const isExceptedSubDomain = (a: string): boolean => {
+  if (a[0] === '_') {
+    return true;
+  }
+  return exceptedDomains[a.toLocaleLowerCase()] === true;
+};
+
+export const notExceptedSubDomain = (a: string): boolean =>
+  !isExceptedSubDomain(a);
+
+export const isEmailRecord = (name: string, type: string, value: string) => {
+  return (
+    type.toLocaleLowerCase() === 'mx' ||
+    name.indexOf('_domainkey') > -1 ||
+    name.startsWith('feishu') ||
+    value.startsWith('v=spf1')
+  );
 };

@@ -28,9 +28,11 @@ class MessageLoading {
   hide() {
     this.canShowDelayLoading = false;
     this.timerId && clearTimeout(this.timerId);
-    this.closer?.();
-    this.timerId = undefined;
-    this.closer = undefined;
+    setTimeout(() => {
+      this.closer?.();
+      this.timerId = undefined;
+      this.closer = undefined;
+    }, 100);
   }
 
   success(content: string) {
