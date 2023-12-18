@@ -6,9 +6,11 @@ import {
   Input,
   InputNumber,
   Modal,
+  Popconfirm,
   Radio,
   Select
 } from '@arco-design/web-react';
+import ButtonMine from '$components/button';
 import useCheckBeforeRender from '$hooks/useCheckBeforeRender';
 import { type Dnspod, DnspodAPI } from '$service/dnspod';
 import { createMessageLoading, GlobalMessage } from '$utils/message';
@@ -22,6 +24,8 @@ import {
   recordListSorter
 } from '$pages/manage/util';
 import { IconLoading, IconRefresh } from '@arco-design/web-react/icon';
+import useKeepOrderSet from '$hooks/useKeepOrderSet';
+import cx from 'classnames';
 
 interface FormData {
   subDomain: string;
@@ -284,11 +288,79 @@ const ManagePage: React.FC = () => {
     setModifyModalVisible(true);
   }, []);
 
+  const [
+    multiSelectedId,
+    isMultiMode,
+    { insert: multiAdd, delete: multiDelete, clear: clearMultiSelectedId }
+  ] = useKeepOrderSet<number>();
+
+  const [multiDeleteRecordLoading, setMultiDeleteRecordLoading] =
+    useState(false);
+  const [
+    multiChangeRecordStateLoadingDisable,
+    setMultiChangeRecordStateLoadingDisable
+  ] = useState(false);
+  const [
+    multiChangeRecordStateLoadingEnable,
+    setMultiChangeRecordStateLoadingEnable
+  ] = useState(false);
+
+  const multiDeleteRecord = async () => {
+    const len = multiSelectedId.length;
+    if (len > 0) {
+      setMultiDeleteRecordLoading(true);
+      for (let i = 0; i < len; i++) {
+        const item = multiSelectedId[i];
+        if (item !== undefined) {
+          await deleteRecord(item);
+        }
+      }
+      clearMultiSelectedId();
+      setMultiDeleteRecordLoading(false);
+    }
+  };
+
+  const multiChangeRecordStateDisable = async () => {
+    const len = multiSelectedId.length;
+    if (len > 0) {
+      setMultiChangeRecordStateLoadingDisable(true);
+      for (let i = 0; i < len; i++) {
+        const item = multiSelectedId[i];
+        if (item !== undefined) {
+          await setRecordStatus(item, 'DISABLE');
+        }
+      }
+      clearMultiSelectedId();
+      setMultiChangeRecordStateLoadingDisable(false);
+    }
+  };
+
+  const multiChangeRecordStateEnable = async () => {
+    const len = multiSelectedId.length;
+    if (len > 0) {
+      setMultiChangeRecordStateLoadingEnable(true);
+      for (let i = 0; i < len; i++) {
+        const item = multiSelectedId[i];
+        if (item !== undefined) {
+          await setRecordStatus(item, 'ENABLE');
+        }
+      }
+      clearMultiSelectedId();
+      setMultiChangeRecordStateLoadingEnable(false);
+    }
+  };
+
+  useEffect(() => {
+    console.log('isMultiMode', isMultiMode, multiSelectedId);
+  }, [isMultiMode]);
+
   const renderItem = useCallback((item: Dnspod.RecordListItem) => {
     return (
       <div className={styles.listItem} key={item.RecordId}>
         <RecordLine
           data={item}
+          multiAdd={multiAdd}
+          multiDelete={multiDelete}
           setRecordStatus={setRecordStatus}
           deleteRecord={deleteRecord}
           modifyRecord={modifyRecord}
@@ -444,186 +516,242 @@ const ManagePage: React.FC = () => {
           </div>
         </div>
         {renderWaterFall}
-
-        <Modal
-          title='添加解析记录'
-          visible={addModalVisible}
-          onOk={onAddModalOK}
-          confirmLoading={addModalLoading}
-          onCancel={() => setAddModalVisible(false)}
+        <div
+          className={cx(
+            styles.multiWrapper,
+            isMultiMode && styles.multiWrapperDisplay
+          )}
         >
-          <Form
-            form={addForm}
-            disabled={addModalLoading}
-            initialValues={addModalFormData}
-            onValuesChange={(a) => {
-              setAddModalFormData((prev: any) => ({ ...prev, ...a }));
-            }}
-            labelCol={{
-              span: 4,
-              style: { flexBasis: 90 }
-            }}
-            wrapperCol={{
-              span: 20,
-              style: { flexBasis: 'calc(100% - 90px)' }
-            }}
+          <div className={cx(styles.multi, isMultiMode && styles.multiDisplay)}>
+            <div className={styles.multiItem}>
+              <Popconfirm
+                title='删除解析记录'
+                content='确定要批量删除记录吗？'
+                onOk={() => {
+                  multiDeleteRecord();
+                }}
+              >
+                <ButtonMine
+                  loading={multiDeleteRecordLoading}
+                  color={'hsl(0, 38%, 60%)'}
+                >
+                  删除
+                </ButtonMine>
+              </Popconfirm>
+            </div>
+            <div className={styles.multiItem}>
+              <Popconfirm
+                title={'暂停解析'}
+                content={'确定要进行此批量暂停解析操作吗？'}
+                onOk={() => {
+                  multiChangeRecordStateDisable();
+                }}
+              >
+                <ButtonMine
+                  loading={multiChangeRecordStateLoadingDisable}
+                  color={'hsl(39, 38%, 60%)'}
+                >
+                  {'暂停解析'}
+                </ButtonMine>
+              </Popconfirm>
+            </div>
+            <div className={styles.multiItem}>
+              <Popconfirm
+                title={'继续解析'}
+                content={'确定要进行此批量继续解析操作吗？'}
+                onOk={() => {
+                  multiChangeRecordStateEnable();
+                }}
+              >
+                <ButtonMine
+                  loading={multiChangeRecordStateLoadingEnable}
+                  color={'hsl(120, 38%, 60%)'}
+                >
+                  {'继续解析'}
+                </ButtonMine>
+              </Popconfirm>
+            </div>
+          </div>
+          <Modal
+            title='添加解析记录'
+            visible={addModalVisible}
+            onOk={onAddModalOK}
+            confirmLoading={addModalLoading}
+            onCancel={() => setAddModalVisible(false)}
           >
-            <Form.Item
-              label='主机记录'
-              field='subDomain'
-              rules={[{ required: true }]}
-            >
-              <Input placeholder='' defaultValue={subDomain} />
-            </Form.Item>
-            <Form.Item
-              label='记录类型'
-              required
-              field='recordType'
-              rules={[{ required: true }]}
-            >
-              <Select
-                options={[
-                  'A',
-                  'AAAA',
-                  'CNAME',
-                  'TXT',
-                  'MX',
-                  'CAA',
-                  'NS',
-                  'HTTPS',
-                  'SRV',
-                  'SPF',
-                  'SVCB'
-                ]}
-              />
-            </Form.Item>
-            <Form.Item
-              label='线路'
-              disabled
-              required
-              field='line'
-              rules={[{ required: true }]}
-            >
-              <Select options={['默认']} />
-            </Form.Item>
-            <Form.Item
-              label='记录值'
-              field='recordValue'
-              rules={[{ required: true }]}
-            >
-              <Input placeholder='' />
-            </Form.Item>
-            <Form.Item noStyle shouldUpdate>
-              {(values) => {
-                return ['MX', 'HTTPS'].indexOf(values.recordType) > -1 ? (
-                  <Form.Item
-                    label='优先级'
-                    field='recordMX'
-                    rules={[{ required: true }]}
-                  >
-                    <InputNumber precision={0} hideControl />
-                  </Form.Item>
-                ) : null;
+            <Form
+              form={addForm}
+              disabled={addModalLoading}
+              initialValues={addModalFormData}
+              onValuesChange={(a) => {
+                setAddModalFormData((prev: any) => ({ ...prev, ...a }));
               }}
-            </Form.Item>
-            <Form.Item
-              label='TTL'
-              field='recordTTL'
-              rules={[{ required: true }]}
+              labelCol={{
+                span: 4,
+                style: { flexBasis: 90 }
+              }}
+              wrapperCol={{
+                span: 20,
+                style: { flexBasis: 'calc(100% - 90px)' }
+              }}
             >
-              <InputNumber precision={0} hideControl />
-            </Form.Item>
-          </Form>
-        </Modal>
-        <Modal
-          title='修改解析记录'
-          visible={modifyModalVisible}
-          onOk={onModifyModalOK}
-          confirmLoading={modifyModalLoading}
-          onCancel={() => setModifyModalVisible(false)}
-        >
-          <Form
-            form={modifyForm}
-            disabled={modifyModalLoading}
-            labelCol={{
-              span: 4,
-              style: { flexBasis: 90 }
-            }}
-            wrapperCol={{
-              span: 20,
-              style: { flexBasis: 'calc(100% - 90px)' }
-            }}
+              <Form.Item
+                label='主机记录'
+                field='subDomain'
+                rules={[{ required: true }]}
+              >
+                <Input placeholder='' defaultValue={subDomain} />
+              </Form.Item>
+              <Form.Item
+                label='记录类型'
+                required
+                field='recordType'
+                rules={[{ required: true }]}
+              >
+                <Select
+                  options={[
+                    'A',
+                    'AAAA',
+                    'CNAME',
+                    'TXT',
+                    'MX',
+                    'CAA',
+                    'NS',
+                    'HTTPS',
+                    'SRV',
+                    'SPF',
+                    'SVCB'
+                  ]}
+                />
+              </Form.Item>
+              <Form.Item
+                label='线路'
+                disabled
+                required
+                field='line'
+                rules={[{ required: true }]}
+              >
+                <Select options={['默认']} />
+              </Form.Item>
+              <Form.Item
+                label='记录值'
+                field='recordValue'
+                rules={[{ required: true }]}
+              >
+                <Input placeholder='' />
+              </Form.Item>
+              <Form.Item noStyle shouldUpdate>
+                {(values) => {
+                  return ['MX', 'HTTPS'].indexOf(values.recordType) > -1 ? (
+                    <Form.Item
+                      label='优先级'
+                      field='recordMX'
+                      rules={[{ required: true }]}
+                    >
+                      <InputNumber precision={0} hideControl />
+                    </Form.Item>
+                  ) : null;
+                }}
+              </Form.Item>
+              <Form.Item
+                label='TTL'
+                field='recordTTL'
+                rules={[{ required: true }]}
+              >
+                <InputNumber precision={0} hideControl />
+              </Form.Item>
+            </Form>
+          </Modal>
+          <Modal
+            title='修改解析记录'
+            visible={modifyModalVisible}
+            onOk={onModifyModalOK}
+            confirmLoading={modifyModalLoading}
+            onCancel={() => setModifyModalVisible(false)}
           >
-            <Form.Item
-              label='主机记录'
-              field='subDomain'
-              rules={[{ required: true }]}
-            >
-              <Input placeholder='' defaultValue={subDomain} />
-            </Form.Item>
-            <Form.Item
-              label='记录类型'
-              required
-              field='recordType'
-              rules={[{ required: true }]}
-            >
-              <Select
-                options={[
-                  'A',
-                  'AAAA',
-                  'CNAME',
-                  'TXT',
-                  'MX',
-                  'CAA',
-                  'NS',
-                  'HTTPS',
-                  'SRV',
-                  'SPF',
-                  'SVCB'
-                ]}
-              />
-            </Form.Item>
-            <Form.Item
-              label='线路'
-              disabled
-              required
-              field='line'
-              rules={[{ required: true }]}
-            >
-              <Select options={['默认']} />
-            </Form.Item>
-            <Form.Item
-              label='记录值'
-              field='recordValue'
-              rules={[{ required: true }]}
-            >
-              <Input placeholder='' />
-            </Form.Item>
-            <Form.Item noStyle shouldUpdate>
-              {(values) => {
-                return ['MX', 'HTTPS'].indexOf(values.recordType) > -1 ? (
-                  <Form.Item
-                    label='优先级'
-                    field='recordMX'
-                    rules={[{ required: true }]}
-                  >
-                    <InputNumber precision={0} hideControl />
-                  </Form.Item>
-                ) : null;
+            <Form
+              form={modifyForm}
+              disabled={modifyModalLoading}
+              labelCol={{
+                span: 4,
+                style: { flexBasis: 90 }
               }}
-            </Form.Item>
-            <Form.Item
-              label='TTL'
-              field='recordTTL'
-              rules={[{ required: true }]}
+              wrapperCol={{
+                span: 20,
+                style: { flexBasis: 'calc(100% - 90px)' }
+              }}
             >
-              <InputNumber precision={0} hideControl />
-            </Form.Item>
-          </Form>
-          <Button type='default' onClick={resetModifyForm}>
-            重置
-          </Button>
-        </Modal>
+              <Form.Item
+                label='主机记录'
+                field='subDomain'
+                rules={[{ required: true }]}
+              >
+                <Input placeholder='' defaultValue={subDomain} />
+              </Form.Item>
+              <Form.Item
+                label='记录类型'
+                required
+                field='recordType'
+                rules={[{ required: true }]}
+              >
+                <Select
+                  options={[
+                    'A',
+                    'AAAA',
+                    'CNAME',
+                    'TXT',
+                    'MX',
+                    'CAA',
+                    'NS',
+                    'HTTPS',
+                    'SRV',
+                    'SPF',
+                    'SVCB'
+                  ]}
+                />
+              </Form.Item>
+              <Form.Item
+                label='线路'
+                disabled
+                required
+                field='line'
+                rules={[{ required: true }]}
+              >
+                <Select options={['默认']} />
+              </Form.Item>
+              <Form.Item
+                label='记录值'
+                field='recordValue'
+                rules={[{ required: true }]}
+              >
+                <Input placeholder='' />
+              </Form.Item>
+              <Form.Item noStyle shouldUpdate>
+                {(values) => {
+                  return ['MX', 'HTTPS'].indexOf(values.recordType) > -1 ? (
+                    <Form.Item
+                      label='优先级'
+                      field='recordMX'
+                      rules={[{ required: true }]}
+                    >
+                      <InputNumber precision={0} hideControl />
+                    </Form.Item>
+                  ) : null;
+                }}
+              </Form.Item>
+              <Form.Item
+                label='TTL'
+                field='recordTTL'
+                rules={[{ required: true }]}
+              >
+                <InputNumber precision={0} hideControl />
+              </Form.Item>
+            </Form>
+            <Button type='default' onClick={resetModifyForm}>
+              重置
+            </Button>
+          </Modal>
+        </div>
       </div>
     </Wrapper>
   );

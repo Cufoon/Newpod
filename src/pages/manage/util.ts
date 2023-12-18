@@ -89,3 +89,90 @@ export const isEmailRecord = (name: string, type: string, value: string) => {
     value.startsWith('v=spf1')
   );
 };
+
+export class KeepOrderSet<T> {
+  arr: T[];
+  updateListener: ((...all: any[]) => any)[];
+
+  constructor(listeners: ((...all: any[]) => any)[]) {
+    this.arr = [];
+    this.updateListener = [...listeners];
+  }
+
+  onUpdate() {
+    this.updateListener.forEach((item) => {
+      item();
+    });
+  }
+
+  exist(v: T): boolean {
+    if (this.arr.length === 0) {
+      return false;
+    }
+    let start = 0;
+    let end = this.arr.length - 1;
+    let middle = Math.floor((start + end) / 2);
+    while (start <= end) {
+      if (v === (this.arr[middle] as T)) {
+        return true;
+      } else if (v > (this.arr[middle] as T)) {
+        start = middle + 1;
+      } else {
+        end = middle - 1;
+      }
+      middle = Math.floor((start + end) / 2);
+    }
+    return false;
+  }
+
+  insert(v: T): void {
+    if (this.arr.length === 0) {
+      this.arr.push(v);
+      this.onUpdate();
+      console.log('insert', v, this.arr);
+      return;
+    }
+    let start = 0;
+    let end = this.arr.length - 1;
+    let middle = Math.floor((start + end) / 2);
+    while (start <= end) {
+      if (v === (this.arr[middle] as T)) {
+        return;
+      } else if (v > (this.arr[middle] as T)) {
+        start = middle + 1;
+      } else {
+        end = middle - 1;
+      }
+      middle = Math.floor((start + end) / 2);
+    }
+    this.arr.splice(start, 0, v);
+    this.onUpdate();
+    console.log('insert', v, this.arr);
+  }
+
+  delete(v: T) {
+    if (this.arr.length === 0) {
+      return;
+    }
+    let start = 0;
+    let end = this.arr.length - 1;
+    let middle = Math.floor((start + end) / 2);
+    while (start <= middle) {
+      if (v === (this.arr[middle] as T)) {
+        this.arr.splice(middle, 1);
+        this.onUpdate();
+        console.log('delete', v, this.arr);
+        return;
+      } else if (v > (this.arr[middle] as T)) {
+        start = middle + 1;
+      } else {
+        end = middle - 1;
+      }
+      middle = Math.floor((start + end) / 2);
+    }
+  }
+
+  getArr() {
+    return this.arr;
+  }
+}

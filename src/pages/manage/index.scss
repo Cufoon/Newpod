@@ -84,3 +84,52 @@
 .list-item {
   padding: 4px 8px;
 }
+
+.multi {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 17px;
+  background-color: #fff;
+  box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.05);
+  padding: 12px;
+  transform: translateY(48px);
+  opacity: 0.2;
+
+  @keyframes uper {
+    0% {
+      transform: translateY(48px);
+      box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.05);
+      opacity: 0.2;
+    }
+    100% {
+      transform: translateY(0);
+      box-shadow: 0 0 60px 1px rgba(0, 0, 0, 0.18);
+      opacity: 1;
+    }
+  }
+
+  &-display {
+    display: flex;
+    animation: uper 0.14s ease-in-out 0s forwards;
+  }
+
+  &-wrapper {
+    z-index: -520;
+    position: fixed;
+    bottom: 48px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &-display {
+      z-index: auto;
+    }
+  }
+
+  &-item {
+    flex: 0 0 auto;
+    padding: 0 4px;
+  }
+}

@@ -6,15 +6,25 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Modal, Popconfirm } from '@arco-design/web-react';
 import Button from '$components/button';
 import { useRef, useState } from 'react';
+import cx from 'classnames';
 
 interface Props {
   data: Dnspod.RecordListItem;
+  multiAdd: (v: number) => void;
+  multiDelete: (v: number) => void;
   setRecordStatus: (id: number, status: string) => Promise<any>;
   modifyRecord: (origin: Dnspod.RecordListItem) => Promise<any>;
   deleteRecord: (id: number) => Promise<any>;
 }
 
-const RecordLine: React.FC<Props> = ({ data, setRecordStatus, modifyRecord, deleteRecord }) => {
+const RecordLine: React.FC<Props> = ({
+  data,
+  multiAdd,
+  multiDelete,
+  setRecordStatus,
+  modifyRecord,
+  deleteRecord
+}) => {
   const [checked, setChecked] = useState(false);
   const [changeStatusLoading, setChangeStatusLoading] = useState(false);
   const [deleteRecordLoading, setDeleteRecordLoading] = useState(false);
@@ -72,7 +82,11 @@ const RecordLine: React.FC<Props> = ({ data, setRecordStatus, modifyRecord, dele
                   Modal.info({
                     icon: null,
                     title: '记录值详情',
-                    content: <div className={styles.recordBodyValueBody}>{data.Value}</div>
+                    content: (
+                      <div className={styles.recordBodyValueBody}>
+                        {data.Value}
+                      </div>
+                    )
                   });
                 }}
               >
@@ -89,7 +103,10 @@ const RecordLine: React.FC<Props> = ({ data, setRecordStatus, modifyRecord, dele
             <div className={styles.recordBodyStatusItem}>
               <InfoLine
                 icon={
-                  <FontAwesomeIcon style={{ fontSize: '16px' }} icon={['fas', 'scale-balanced']} />
+                  <FontAwesomeIcon
+                    style={{ fontSize: '16px' }}
+                    icon={['fas', 'scale-balanced']}
+                  />
                 }
                 content={`权重 ${data.Weight}%`}
                 color={'hsl(255,38%,65%)'}
@@ -99,7 +116,12 @@ const RecordLine: React.FC<Props> = ({ data, setRecordStatus, modifyRecord, dele
           {data.MX && data.MX !== 0 ? (
             <div className={styles.recordBodyStatusItem}>
               <InfoLine
-                icon={<FontAwesomeIcon style={{ fontSize: '16px' }} icon={['fas', 'trophy']} />}
+                icon={
+                  <FontAwesomeIcon
+                    style={{ fontSize: '16px' }}
+                    icon={['fas', 'trophy']}
+                  />
+                }
                 content={`优先级 ${data.MX}`}
                 color={'hsl(255,38%,65%)'}
               />
@@ -126,14 +148,31 @@ const RecordLine: React.FC<Props> = ({ data, setRecordStatus, modifyRecord, dele
           <div
             className={styles.recordFooterCheck}
             style={{ color: checked ? 'rgb(22, 93, 255)' : undefined }}
-            onClick={() => setChecked((prev) => !prev)}
+            onClick={() => {
+              if (checked) {
+                multiDelete(data.RecordId);
+              } else {
+                multiAdd(data.RecordId);
+              }
+              setChecked((prev) => {
+                return !prev;
+              });
+            }}
           >
-            <FontAwesomeIcon icon={checked ? ['fas', 'square-check'] : ['far', 'square']} />
+            <FontAwesomeIcon
+              icon={checked ? ['fas', 'square-check'] : ['far', 'square']}
+            />
           </div>
         </div>
-        <div className={styles.recordFooterRight}>
+        <div
+          className={cx(
+            styles.recordFooterRight,
+            checked && styles.recordFooterRightChecked
+          )}
+        >
           <div className={styles.recordFooterItem}>
             <Popconfirm
+              disabled={checked}
               title='删除解析记录'
               content='确定要删除吗？'
               onOk={() => {
@@ -147,6 +186,7 @@ const RecordLine: React.FC<Props> = ({ data, setRecordStatus, modifyRecord, dele
           </div>
           <div className={styles.recordFooterItem}>
             <Popconfirm
+              disabled={checked}
               title={data.Status === 'ENABLE' ? '暂停解析' : '继续解析'}
               content={'确定要进行此操作吗？'}
               onOk={() => {
@@ -155,14 +195,18 @@ const RecordLine: React.FC<Props> = ({ data, setRecordStatus, modifyRecord, dele
             >
               <Button
                 loading={changeStatusLoading}
-                color={data.Status === 'ENABLE' ? 'hsl(39, 38%, 60%)' : 'hsl(120, 38%, 60%)'}
+                color={
+                  data.Status === 'ENABLE'
+                    ? 'hsl(39, 38%, 60%)'
+                    : 'hsl(120, 38%, 60%)'
+                }
               >
                 {data.Status === 'ENABLE' ? '暂停解析' : '继续解析'}
               </Button>
             </Popconfirm>
           </div>
           <div className={styles.recordFooterItem}>
-            <Button onClick={() => onModifyRecord()}>修改</Button>
+            <Button onClick={() => !checked && onModifyRecord()}>修改</Button>
           </div>
         </div>
       </div>
