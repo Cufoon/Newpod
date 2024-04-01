@@ -1,20 +1,23 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import {
-  Button,
-  Form,
-  Input,
-  InputNumber,
-  Modal,
-  Popconfirm,
-  Radio,
-  Select
-} from '@arco-design/web-react';
-import ButtonMine from '$components/button';
+import Button from '@arco-design/web-react/es/Button';
+import Input from '@arco-design/web-react/es/Input';
+import InputNumber from '@arco-design/web-react/es/InputNumber';
+import Modal from '@arco-design/web-react/es/Modal';
+import PopConfirm from '@arco-design/web-react/es/Popconfirm';
+import Radio from '@arco-design/web-react/es/Radio';
+import Select from '@arco-design/web-react/es/Select';
+import Form from '@arco-design/web-react/es/Form';
 import useCheckBeforeRender from '$hooks/useCheckBeforeRender';
 import { type Dnspod, DnspodAPI } from '$service/dnspod';
 import { createMessageLoading, GlobalMessage } from '$utils/message';
-import styles from './index.scss';
+import styles from './index.module.scss';
 import { getDottedRoot } from '$utils/util';
 import RecordLine from '$pages/manage/record';
 import WaterFall from '$components/waterfall';
@@ -26,6 +29,7 @@ import {
 import { IconLoading, IconRefresh } from '@arco-design/web-react/icon';
 import useKeepOrderSet from '$hooks/useKeepOrderSet';
 import cx from 'classnames';
+import ButtonMine from '$components/button';
 
 interface FormData {
   subDomain: string;
@@ -99,18 +103,6 @@ const ManagePage: React.FC = () => {
     return result;
   }, [originRecordList, subDomain]);
 
-  useEffect(() => {
-    if (
-      init &&
-      recordList.length === 0 &&
-      subDomain !== '' &&
-      subDomain !== '@' &&
-      notExceptedSubDomain(subDomain)
-    ) {
-      changeSubdomain('');
-    }
-  }, [recordList, subDomain, init]);
-
   const subDomainList = useMemo(() => {
     let nowProcessedSubdomain: string[] = ['', '@'];
     let result: { label: string; value: string; disabled?: boolean }[] = [
@@ -137,7 +129,7 @@ const ManagePage: React.FC = () => {
       }
       const wwwIdx = result.findIndex((item) => item.value === 'www');
       if (wwwIdx > 2) {
-        [result[2], result[wwwIdx]] = [result[wwwIdx] as any, result[2] as any];
+        [result[2], result[wwwIdx]] = [result[wwwIdx], result[2]];
       }
     }
     return [
@@ -154,9 +146,9 @@ const ManagePage: React.FC = () => {
       navigate('/');
       return false;
     });
-  }, []);
+  }, [doCheck, domainName, navigate]);
 
-  const getRecordList = async () => {
+  const getRecordList = useCallback(async () => {
     if (domainName) {
       const msl = createMessageLoading();
       msl.loading('加载解析记录');
@@ -184,30 +176,30 @@ const ManagePage: React.FC = () => {
       }
       msl.error('加载失败');
     }
-  };
+  }, [domainName]);
 
-  const getDomainInfo = async () => {
+  const getDomainInfo = useCallback(async () => {
     if (domainName) {
       const [d, e] = await DnspodAPI.getDomain({ Domain: domainName });
       if (e) {
         return;
       }
       if (d?.DomainInfo) {
-        setAddModalFormData((prev: any) => ({
+        setAddModalFormData((prev) => ({
           ...prev,
           recordTTL: d.DomainInfo?.TTL || 600
         }));
       }
     }
-  };
+  }, [domainName]);
 
   useEffect(() => {
     getRecordList();
-  }, []);
+  }, [getRecordList]);
 
   useEffect(() => {
     getDomainInfo();
-  }, []);
+  }, [getDomainInfo]);
 
   const [inRefresh, setInRefresh] = useState(false);
   const timerIdRef = useRef<NodeJS.Timeout>();
@@ -223,14 +215,17 @@ const ManagePage: React.FC = () => {
     }, 20);
   };
 
-  const changeSubdomain = useCallback((value: string) => {
-    setSubDomain(value);
-    if (value === '') {
-      setSearchQuery('');
-      return;
-    }
-    setSearchQuery({ subDomain: value });
-  }, []);
+  const changeSubdomain = useCallback(
+    (value: string) => {
+      setSubDomain(value);
+      if (value === '') {
+        setSearchQuery('');
+        return;
+      }
+      setSearchQuery({ subDomain: value });
+    },
+    [setSearchQuery]
+  );
 
   const setRecordStatus = useCallback(
     async (id: number, status: string) => {
@@ -249,12 +244,12 @@ const ManagePage: React.FC = () => {
           GlobalMessage.success('状态修改成功');
           return;
         }
-        GlobalMessage.error(d?.Error.Message ?? '状态修改失败');
+        GlobalMessage.error(d?.Error?.Message ?? '状态修改失败');
         return;
       }
       GlobalMessage.error('domainName为空！');
     },
-    [domainName]
+    [domainName, getRecordList]
   );
 
   const deleteRecord = useCallback(
@@ -273,12 +268,12 @@ const ManagePage: React.FC = () => {
           GlobalMessage.success('删除成功');
           return;
         }
-        GlobalMessage.error(d?.Error.Message ?? '删除失败');
+        GlobalMessage.error(d?.Error?.Message ?? '删除失败');
         return;
       }
       GlobalMessage.error('domainName为空！');
     },
-    [domainName]
+    [domainName, getRecordList]
   );
 
   const [recordToEdit, setRecordToEdit] = useState<Dnspod.RecordListItem>();
@@ -352,22 +347,25 @@ const ManagePage: React.FC = () => {
 
   useEffect(() => {
     console.log('isMultiMode', isMultiMode, multiSelectedId);
-  }, [isMultiMode]);
+  }, [isMultiMode, multiSelectedId]);
 
-  const renderItem = useCallback((item: Dnspod.RecordListItem) => {
-    return (
-      <div className={styles.listItem} key={item.RecordId}>
-        <RecordLine
-          data={item}
-          multiAdd={multiAdd}
-          multiDelete={multiDelete}
-          setRecordStatus={setRecordStatus}
-          deleteRecord={deleteRecord}
-          modifyRecord={modifyRecord}
-        />
-      </div>
-    );
-  }, []);
+  const renderItem = useCallback(
+    (item: Dnspod.RecordListItem) => {
+      return (
+        <div className={styles.listItem} key={item.RecordId}>
+          <RecordLine
+            data={item}
+            multiAdd={multiAdd}
+            multiDelete={multiDelete}
+            setRecordStatus={setRecordStatus}
+            deleteRecord={deleteRecord}
+            modifyRecord={modifyRecord}
+          />
+        </div>
+      );
+    },
+    [deleteRecord, modifyRecord, multiAdd, multiDelete, setRecordStatus]
+  );
 
   const renderWaterFall = useMemo(
     () => (
@@ -417,7 +415,7 @@ const ManagePage: React.FC = () => {
           setAddModalLoading(false);
           return;
         }
-        GlobalMessage.error(d?.Error.Message ?? '添加失败');
+        GlobalMessage.error(d?.Error?.Message ?? '添加失败');
         setAddModalLoading(false);
         return;
       }
@@ -461,7 +459,7 @@ const ManagePage: React.FC = () => {
           return;
         }
         setModifyModalLoading(false);
-        GlobalMessage.error(d?.Error.Message ?? '修改失败');
+        GlobalMessage.error(d?.Error?.Message ?? '修改失败');
         return;
       }
       setModifyModalLoading(false);
@@ -472,7 +470,7 @@ const ManagePage: React.FC = () => {
     }
   };
 
-  const resetModifyForm = () => {
+  const resetModifyForm = useCallback(() => {
     if (recordToEdit) {
       modifyForm.setFieldsValue({
         subDomain: recordToEdit.Name,
@@ -485,11 +483,23 @@ const ManagePage: React.FC = () => {
     } else {
       modifyForm.clearFields();
     }
-  };
+  }, [modifyForm, recordToEdit]);
 
   useEffect(() => {
     resetModifyForm();
-  }, [recordToEdit]);
+  }, [recordToEdit, resetModifyForm]);
+
+  useEffect(() => {
+    if (
+      init &&
+      recordList.length === 0 &&
+      subDomain !== '' &&
+      subDomain !== '@' &&
+      notExceptedSubDomain(subDomain)
+    ) {
+      changeSubdomain('');
+    }
+  }, [recordList, subDomain, init, changeSubdomain]);
 
   return (
     <Wrapper>
@@ -524,7 +534,7 @@ const ManagePage: React.FC = () => {
         >
           <div className={cx(styles.multi, isMultiMode && styles.multiDisplay)}>
             <div className={styles.multiItem}>
-              <Popconfirm
+              <PopConfirm
                 title='删除解析记录'
                 content='确定要批量删除记录吗？'
                 onOk={() => {
@@ -537,10 +547,10 @@ const ManagePage: React.FC = () => {
                 >
                   删除
                 </ButtonMine>
-              </Popconfirm>
+              </PopConfirm>
             </div>
             <div className={styles.multiItem}>
-              <Popconfirm
+              <PopConfirm
                 title={'暂停解析'}
                 content={'确定要进行此批量暂停解析操作吗？'}
                 onOk={() => {
@@ -553,10 +563,10 @@ const ManagePage: React.FC = () => {
                 >
                   {'暂停解析'}
                 </ButtonMine>
-              </Popconfirm>
+              </PopConfirm>
             </div>
             <div className={styles.multiItem}>
-              <Popconfirm
+              <PopConfirm
                 title={'继续解析'}
                 content={'确定要进行此批量继续解析操作吗？'}
                 onOk={() => {
@@ -569,7 +579,7 @@ const ManagePage: React.FC = () => {
                 >
                   {'继续解析'}
                 </ButtonMine>
-              </Popconfirm>
+              </PopConfirm>
             </div>
           </div>
           <Modal
@@ -584,7 +594,10 @@ const ManagePage: React.FC = () => {
               disabled={addModalLoading}
               initialValues={addModalFormData}
               onValuesChange={(a) => {
-                setAddModalFormData((prev: any) => ({ ...prev, ...a }));
+                setAddModalFormData((prev) => ({
+                  ...prev,
+                  ...a
+                }));
               }}
               labelCol={{
                 span: 4,

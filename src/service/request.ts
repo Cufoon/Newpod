@@ -1,4 +1,9 @@
-import axios, { AxiosRequestConfig, AxiosResponse, Method, RawAxiosRequestHeaders } from 'axios';
+import axios, {
+  AxiosRequestConfig,
+  AxiosResponse,
+  Method,
+  RawAxiosRequestHeaders
+} from 'axios';
 import qs from 'qs';
 
 export type Return<T> = Promise<[data: T | undefined, err?: string]>;
@@ -19,12 +24,12 @@ export async function request<T, U>(
     const options: AxiosRequestConfig<T> = {
       url,
       method,
-      headers: { ...(option?.headers as any) }
+      headers: { ...(option?.headers as RawAxiosRequestHeaders) }
     };
     if (!option?.withoutToken) {
       options.headers = {
         Authorization: 'something'
-      } as any;
+      } as RawAxiosRequestHeaders;
     }
     if (option?.abortSignal) {
       options.signal = option.abortSignal;
@@ -46,25 +51,35 @@ export async function request<T, U>(
       return [undefined, res.statusText];
     }
     return [res.data];
-  } catch (e: any) {
+  } catch (e: unknown) {
     console.log('请求意外错误', e);
-    return [undefined, e.toString()];
+    return [undefined, (e as Error).toString()];
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function requestGet<U = any>(url: string): Return<U> {
   return await request<unknown, U>(url, 'GET');
 }
 
-export async function requestGetWithParam<T = any, U = any>(url: string, data: T): Return<U> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function requestGetWithParam<T = any, U = any>(
+  url: string,
+  data: T
+): Return<U> {
   const query = qs.stringify(data);
   return await request<T, U>(`${url}?${query}`, 'GET');
 }
 
-export async function requestGetWithData<T = any, U = any>(url: string, data: T): Return<U> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function requestGetWithData<T = any, U = any>(
+  url: string,
+  data: T
+): Return<U> {
   return await request<T, U>(url, 'GET', data);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function requestPost<T = any, U = any>(
   url: string,
   data: T,
@@ -73,6 +88,10 @@ export async function requestPost<T = any, U = any>(
   return await request<T, U>(url, 'POST', data, option);
 }
 
-export async function requestPut<T = any, U = any>(url: string, data: T): Return<U> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function requestPut<T = any, U = any>(
+  url: string,
+  data: T
+): Return<U> {
   return await request<T, U>(url, 'PUT', data);
 }

@@ -6,53 +6,47 @@ import LoginPage from '$pages/login';
 import App from './app';
 import ManagePage from '$pages/manage';
 import ManageRedirect from '$pages/manage/redirect';
-import appSetting from '$src/../config';
 
-const router = createHashRouter(
-  [
-    {
-      path: '/',
-      element: <App />,
-      children: [
-        {
-          index: true,
-          element: <HomePage />
-        },
-        {
-          path: 'home',
-          element: <HomePage />
-        },
-        {
-          path: 'forbidden',
-          element: <ForbiddenPage />
-        },
-        {
-          path: 'manage/:domainName/record',
-          element: <ManagePage />
-        },
-        {
-          path: 'manage/:domainName',
-          element: <ManageRedirect />
-        },
-        {
-          path: 'manage',
-          element: <ManageRedirect />
-        }
-      ]
-    },
-    {
-      path: 'setting',
-      element: <LoginPage />
-    },
-    {
-      path: '*',
-      element: <ForbiddenPage />
-    }
-  ],
+const router = createHashRouter([
   {
-    basename: appSetting.subPath
+    path: '/',
+    element: <App />,
+    children: [
+      {
+        index: true,
+        element: <HomePage />
+      },
+      {
+        path: 'home',
+        element: <HomePage />
+      },
+      {
+        path: 'forbidden',
+        element: <ForbiddenPage />
+      },
+      {
+        path: 'manage/:domainName/record',
+        element: <ManagePage />
+      },
+      {
+        path: 'manage/:domainName',
+        element: <ManageRedirect />
+      },
+      {
+        path: 'manage',
+        element: <ManageRedirect />
+      }
+    ]
+  },
+  {
+    path: 'setting',
+    element: <LoginPage />
+  },
+  {
+    path: '*',
+    element: <ForbiddenPage />
   }
-);
+]);
 
 const RouteList: React.FC = () => <RouterProvider router={router} />;
 

@@ -1,20 +1,22 @@
-import type { Dnspod } from '$service/dnspod';
+import React, { useRef, useState } from 'react';
+import cx from 'classnames';
+import Modal from '@arco-design/web-react/es/Modal';
+import PopConfirm from '@arco-design/web-react/es/Popconfirm';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Button from '$components/button';
 import Status from '$components/status';
 import InfoLine from './info-line';
-import styles from './record.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Modal, Popconfirm } from '@arco-design/web-react';
-import Button from '$components/button';
-import { useRef, useState } from 'react';
-import cx from 'classnames';
+import styles from './record.module.scss';
+
+import type { Dnspod } from '$service/dnspod';
 
 interface Props {
   data: Dnspod.RecordListItem;
   multiAdd: (v: number) => void;
   multiDelete: (v: number) => void;
-  setRecordStatus: (id: number, status: string) => Promise<any>;
-  modifyRecord: (origin: Dnspod.RecordListItem) => Promise<any>;
-  deleteRecord: (id: number) => Promise<any>;
+  setRecordStatus: (id: number, status: string) => Promise<unknown>;
+  modifyRecord: (origin: Dnspod.RecordListItem) => Promise<unknown>;
+  deleteRecord: (id: number) => Promise<unknown>;
 }
 
 const RecordLine: React.FC<Props> = ({
@@ -171,27 +173,23 @@ const RecordLine: React.FC<Props> = ({
           )}
         >
           <div className={styles.recordFooterItem}>
-            <Popconfirm
+            <PopConfirm
               disabled={checked}
               title='删除解析记录'
               content='确定要删除吗？'
-              onOk={() => {
-                onDeleteRecord();
-              }}
+              onOk={() => onDeleteRecord()}
             >
               <Button loading={deleteRecordLoading} color={'hsl(0, 38%, 60%)'}>
                 删除
               </Button>
-            </Popconfirm>
+            </PopConfirm>
           </div>
           <div className={styles.recordFooterItem}>
-            <Popconfirm
+            <PopConfirm
               disabled={checked}
               title={data.Status === 'ENABLE' ? '暂停解析' : '继续解析'}
               content={'确定要进行此操作吗？'}
-              onOk={() => {
-                onChangeStatus();
-              }}
+              onOk={() => onChangeStatus()}
             >
               <Button
                 loading={changeStatusLoading}
@@ -203,7 +201,7 @@ const RecordLine: React.FC<Props> = ({
               >
                 {data.Status === 'ENABLE' ? '暂停解析' : '继续解析'}
               </Button>
-            </Popconfirm>
+            </PopConfirm>
           </div>
           <div className={styles.recordFooterItem}>
             <Button onClick={() => !checked && onModifyRecord()}>修改</Button>

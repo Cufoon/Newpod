@@ -4,7 +4,7 @@ import Footer from '$components/footer';
 import Navbar from '$components/nav';
 import { getCurrentAccount } from '$service/account';
 
-import styles from './app.scss';
+import styles from './app.module.scss';
 
 const App: React.FC = () => {
   const [init, setInit] = useState(false);

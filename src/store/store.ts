@@ -7,7 +7,9 @@ const pureStateUpdater: PureStateUpdater = (state, type, payload?) => {
   if (setHandler) {
     return setHandler(state, payload as never);
   }
-  console.log('[error] set function for this action type is not found, state is not changed!');
+  console.log(
+    '[error] set function for this action type is not found, state is not changed!'
+  );
   return state;
 };
 
@@ -24,7 +26,9 @@ const reducer: ReducerType = (state, action) => {
       const payload = action.process(preState, ...(action.param || []));
       return pureStateUpdater(state, action.type, payload);
     }
-    console.log('[error] get function for this action type is not found, state is not changed!');
+    console.log(
+      '[error] get function for this action type is not found, state is not changed!'
+    );
     return state;
   }
   return pureStateUpdater(state, action.type, action.payload);

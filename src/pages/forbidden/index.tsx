@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 const ForbiddenPage: React.FC = () => {
   const navigate = useNavigate();

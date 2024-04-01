@@ -1,4 +1,4 @@
-import styles from './info-line.scss';
+import styles from './info-line.module.scss';
 
 interface Props {
   icon: string | number | JSX.Element;

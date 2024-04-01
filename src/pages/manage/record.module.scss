@@ -62,7 +62,11 @@
         position: absolute;
         top: calc(13.5em + 4px);
         right: 0;
-        background: linear-gradient(to right, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 1));
+        background: linear-gradient(
+          to right,
+          rgba(255, 255, 255, 0.6),
+          rgba(255, 255, 255, 1)
+        );
         border-radius: 4px;
         padding: 0 8px;
         display: flex;

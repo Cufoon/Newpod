@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 interface Props {
   color?: string;
@@ -25,8 +25,17 @@ const Index: React.FC<Props> = ({
   };
 
   return (
-    <div onClick={click} className={styles.wrapper} style={{ color: color, borderColor: color }}>
-      {loading && <FontAwesomeIcon className={styles.rotateIcon} icon={['fas', 'spinner']} />}
+    <div
+      onClick={click}
+      className={styles.wrapper}
+      style={{ color: color, borderColor: color }}
+    >
+      {loading && (
+        <FontAwesomeIcon
+          className={styles.rotateIcon}
+          icon={['fas', 'spinner']}
+        />
+      )}
       {children}
     </div>
   );

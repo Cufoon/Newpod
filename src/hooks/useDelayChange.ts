@@ -8,8 +8,14 @@ interface Params<T> {
 
 const delayChange = <T = boolean>(
   params?: Params<T>
-): [T, (value?: number | boolean) => void, (value?: number | boolean) => void] => {
-  const [dataList] = useState<T[]>(params?.data ?? ([false, true] as unknown as T[]));
+): [
+  T,
+  (value?: number | boolean) => void,
+  (value?: number | boolean) => void
+] => {
+  const [dataList] = useState<T[]>(
+    params?.data ?? ([false, true] as unknown as T[])
+  );
   const [defaultIndex] = useState<number>(params?.default ?? 0);
   const [delay] = useState<number>(params?.delay ?? 200);
   const [value, setValue] = useState<T>(dataList[defaultIndex] as T);

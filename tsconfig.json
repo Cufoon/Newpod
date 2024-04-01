@@ -1,39 +1,24 @@
 {
   "compilerOptions": {
-    /* Language and Environment */
     "target": "ESNext",
-    "jsx": "react-jsx",
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    /* Modules */
+    "useDefineForClassFields": true,
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
-    /* JavaScript Support */
-    "allowJs": true,
-    "checkJs": true,
-    /* Emit */
-    "sourceMap": true,
-    "removeComments": true,
-    "importsNotUsedAsValues": "remove",
-    "newLine": "lf",
-    /* Interop Constraints */
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    /* Type Checking */
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "exactOptionalPropertyTypes": true,
-    "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
-    "allowUnusedLabels": false,
-    "allowUnreachableCode": false,
-    /* Completeness */
-    "skipLibCheck": true,
     "paths": {
       "$assets/*": ["./src/assets/*"],
       "$components/*": ["./src/components/*"],
@@ -45,10 +30,6 @@
       "$utils/*": ["./src/utils/*"]
     }
   },
-  "include": ["src/**/*", "webpack/**/*", "*.ts"],
-  "ts-node": {
-    "compilerOptions": {
-      "module": "CommonJS"
-    }
-  }
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

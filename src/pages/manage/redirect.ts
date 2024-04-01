@@ -23,7 +23,7 @@ const Index: React.FC = () => {
       return;
     }
     navigate(`/manage/${tmp}/record`, { replace: true });
-  }, []);
+  }, [domainNamePrefered, navigate]);
   return null;
 };
 

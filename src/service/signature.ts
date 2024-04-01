@@ -74,7 +74,10 @@ export async function getSignature(
   const canonicalUri = '/';
   const canonicalQueryString = '';
   const canonicalHeaders =
-    'content-type:application/json; charset=utf-8\n' + 'host:' + service.endpoint + '\n';
+    'content-type:application/json; charset=utf-8\n' +
+    'host:' +
+    service.endpoint +
+    '\n';
 
   const canonicalRequest =
     httpRequestMethod +
@@ -95,11 +98,20 @@ export async function getSignature(
   const hashedCanonicalRequest = await getHash(canonicalRequest);
   const credentialScope = date + '/' + service.service + '/' + 'tc3_request';
   const stringToSign =
-    algorithm + '\n' + timestamp + '\n' + credentialScope + '\n' + hashedCanonicalRequest;
+    algorithm +
+    '\n' +
+    timestamp +
+    '\n' +
+    credentialScope +
+    '\n' +
+    hashedCanonicalRequest;
   console.log(stringToSign);
 
   // ************* 步骤 3：计算签名 *************
-  const kDate = await signWithSHA256HMAC(date, encoder.encode('TC3' + secretKey));
+  const kDate = await signWithSHA256HMAC(
+    date,
+    encoder.encode('TC3' + secretKey)
+  );
   const kService = await signWithSHA256HMAC(service.service, kDate);
   const kSigning = await signWithSHA256HMAC('tc3_request', kService);
   const signature = hex(await signWithSHA256HMAC(stringToSign, kSigning));

@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import type { ColumnItem } from './util';
-import styles from './column.scss';
+import styles from './column.module.scss';
 
 interface Props<T> {
   width: string;

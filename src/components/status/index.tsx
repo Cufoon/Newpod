@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 interface Props {
   status: string | undefined;

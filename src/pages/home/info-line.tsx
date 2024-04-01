@@ -1,4 +1,4 @@
-import styles from './info-line.scss';
+import styles from './info-line.module.scss';
 
 interface Props {
   title: any;

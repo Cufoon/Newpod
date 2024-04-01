@@ -15,7 +15,7 @@ const enum DnspodAction {
   Modify_Record = 'ModifyRecord'
 }
 
-type APIResponse<T> = { Error?: any } & T;
+type APIResponse<T> = { Error?: { Message: string } } & T;
 
 interface GlobalReturn<T> {
   Response: APIResponse<T>;
@@ -59,45 +59,46 @@ const apiRequestDNSPOD = async <T, U>(
 };
 
 const getDomainList = async () =>
-  await apiRequestDNSPOD<Dnspod.DescribeDomainListRequest, Dnspod.DescribeDomainListResponse>(
-    DnspodAction.GET_DOMAIN_LIST
-  );
+  await apiRequestDNSPOD<
+    Dnspod.DescribeDomainListRequest,
+    Dnspod.DescribeDomainListResponse
+  >(DnspodAction.GET_DOMAIN_LIST);
 
 const getDomain = async (data: Dnspod.DescribeDomainRequest) =>
-  await apiRequestDNSPOD<Dnspod.DescribeDomainRequest, Dnspod.DescribeDomainResponse>(
-    DnspodAction.GET_DOMAIN_INFO,
-    data
-  );
+  await apiRequestDNSPOD<
+    Dnspod.DescribeDomainRequest,
+    Dnspod.DescribeDomainResponse
+  >(DnspodAction.GET_DOMAIN_INFO, data);
 
 const getRecordListOfDomain = async (domain: string) =>
-  await apiRequestDNSPOD<Dnspod.DescribeRecordListRequest, Dnspod.DescribeRecordListResponse>(
-    DnspodAction.GET_RECORD_LIST,
-    { Domain: domain }
-  );
+  await apiRequestDNSPOD<
+    Dnspod.DescribeRecordListRequest,
+    Dnspod.DescribeRecordListResponse
+  >(DnspodAction.GET_RECORD_LIST, { Domain: domain });
 
 const setRecordStatus = async (data: Dnspod.ModifyRecordStatusRequest) =>
-  await apiRequestDNSPOD<Dnspod.ModifyRecordStatusRequest, Dnspod.ModifyRecordStatusResponse>(
-    DnspodAction.SET_RECORD_STATUS,
-    data
-  );
+  await apiRequestDNSPOD<
+    Dnspod.ModifyRecordStatusRequest,
+    Dnspod.ModifyRecordStatusResponse
+  >(DnspodAction.SET_RECORD_STATUS, data);
 
 const addRecord = async (data: Dnspod.CreateRecordRequest) =>
-  await apiRequestDNSPOD<Dnspod.CreateRecordRequest, Dnspod.CreateRecordResponse>(
-    DnspodAction.ADD_RECORD,
-    data
-  );
+  await apiRequestDNSPOD<
+    Dnspod.CreateRecordRequest,
+    Dnspod.CreateRecordResponse
+  >(DnspodAction.ADD_RECORD, data);
 
 const deleteRecord = async (data: Dnspod.DeleteRecordRequest) =>
-  await apiRequestDNSPOD<Dnspod.DeleteRecordRequest, Dnspod.DeleteRecordResponse>(
-    DnspodAction.DELETE_RECORD,
-    data
-  );
+  await apiRequestDNSPOD<
+    Dnspod.DeleteRecordRequest,
+    Dnspod.DeleteRecordResponse
+  >(DnspodAction.DELETE_RECORD, data);
 
 const modifyRecord = async (data: Dnspod.ModifyRecordRequest) =>
-  await apiRequestDNSPOD<Dnspod.ModifyRecordRequest, Dnspod.ModifyRecordResponse>(
-    DnspodAction.Modify_Record,
-    data
-  );
+  await apiRequestDNSPOD<
+    Dnspod.ModifyRecordRequest,
+    Dnspod.ModifyRecordResponse
+  >(DnspodAction.Modify_Record, data);
 
 export const DnspodAPI = {
   getDomainList,

@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
+import React, { Key, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Image, List } from '@arco-design/web-react';
+import Image from '@arco-design/web-react/es/Image';
+import List from '@arco-design/web-react/es/List';
 import { type Dnspod, DnspodAPI } from '$service/dnspod';
 import { createMessageLoading } from '$utils/message';
-import InfoLine from './info-line';
 import Status from '$components/status';
-import styles from './index.scss';
+import InfoLine from './info-line';
+import styles from './index.module.scss';
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
@@ -87,15 +88,17 @@ const HomePage: React.FC = () => {
                   title={'NS状态'}
                   content={(item.DNSStatus && '状态错误') || '状态正常'}
                 />
-                {item.EffectiveDNS?.map((ii, idx) => {
-                  return (
-                    <InfoLine
-                      key={ii}
-                      title={`DNS服务器${idx + 1}`}
-                      content={ii}
-                    />
-                  );
-                })}
+                {item.EffectiveDNS?.map(
+                  (ii: Key | null | undefined, idx: number) => {
+                    return (
+                      <InfoLine
+                        key={ii}
+                        title={`DNS服务器${idx + 1}`}
+                        content={ii}
+                      />
+                    );
+                  }
+                )}
                 <InfoLine title={'记录总数'} content={item.RecordCount} />
                 <InfoLine title={'最后更新时间'} content={item.UpdatedOn} />
                 <div

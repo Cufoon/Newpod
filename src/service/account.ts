@@ -48,7 +48,9 @@ export const getCurrentAccountList = async (): Promise<Account[]> => {
 export const setCurrentAccount = async (v: string): Promise<boolean> => {
   for (const item of accountList) {
     if (item.localId === v) {
-      const isStored = await storage.setAccount(JSON.stringify({ currentId: v, accountList }));
+      const isStored = await storage.setAccount(
+        JSON.stringify({ currentId: v, accountList })
+      );
       if (isStored) {
         currentAccount = { ...item };
         return true;
@@ -65,7 +67,10 @@ export const setCurrentAccountWithoutStore = (v: Account) => {
 export const addAccount = async (v: Account) => {
   const nextAccountList = [v, ...accountList];
   const isStored = await storage.setAccount(
-    JSON.stringify({ currentId: currentAccount?.localId, accountList: nextAccountList })
+    JSON.stringify({
+      currentId: currentAccount?.localId,
+      accountList: nextAccountList
+    })
   );
   if (isStored) {
     accountList = nextAccountList;
@@ -78,8 +83,12 @@ export const deleteAccount = async (v: string): Promise<boolean> => {
   const len = accountList.length;
   for (let i = 0; i < len; ++i) {
     if (accountList[i]?.localId === v) {
-      const nextAccountList = accountList.slice(0, i).concat(accountList.slice(i + 1));
-      const isStored = await storage.setAccount(JSON.stringify({ currentId: v, nextAccountList }));
+      const nextAccountList = accountList
+        .slice(0, i)
+        .concat(accountList.slice(i + 1));
+      const isStored = await storage.setAccount(
+        JSON.stringify({ currentId: v, nextAccountList })
+      );
       if (isStored) {
         if (currentAccount?.localId === v) {
           currentAccount = nextAccountList[0] || null;

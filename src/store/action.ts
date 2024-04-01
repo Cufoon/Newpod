@@ -1,4 +1,8 @@
-import type { GlobalState, ActionSetHandler, ActionGetHandler } from './interface';
+import type {
+  GlobalState,
+  ActionSetHandler,
+  ActionGetHandler
+} from './interface';
 
 export const initialState: GlobalState = {
   account_id: '',
@@ -18,7 +22,10 @@ export type ActionState = {
 };
 
 export const actionsSet: { [index in Action]: ActionSetHandler<index> } = {
-  [Action.CHANGE_ACCOUNT_ID]: (state, payload) => ({ ...state, account_id: payload }),
+  [Action.CHANGE_ACCOUNT_ID]: (state, payload) => ({
+    ...state,
+    account_id: payload
+  }),
   [Action.CHANGE_AUTH]: (state, payload) => ({ ...state, auth: payload }),
   [Action.RESET]: () => initialState
 };

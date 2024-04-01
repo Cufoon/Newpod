@@ -9,7 +9,10 @@ interface ColumnInfo<T> {
   data: ColumnItem<T>[];
 }
 
-export const calculateColumns = <T>(data: T[], column: number): ColumnInfo<T>[] => {
+export const calculateColumns = <T>(
+  data: T[],
+  column: number
+): ColumnInfo<T>[] => {
   const widthRate = `${(100 / column).toFixed(3)}%`;
   const total = data.length;
   const result = new Array<ColumnInfo<T>>(column);

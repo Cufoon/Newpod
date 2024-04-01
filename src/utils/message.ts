@@ -1,5 +1,6 @@
-import { Message, MessageProps } from '@arco-design/web-react';
+import Message, { MessageProps } from '@arco-design/web-react/es/Message';
 import type { MessageType as CloserType } from '@arco-design/web-react/es/Message';
+import React from 'react';
 
 class MessageLoading {
   canShowDelayLoading = true;
@@ -65,7 +66,7 @@ export const createMessageLoading = (delay = 1000) => {
 const convertMessageFunc = (
   fn: (config: string | MessageProps) => CloserType
 ) => {
-  return (content: string | JSX.Element, duration = 2000) => {
+  return (content: string | React.JSX.Element, duration = 2000) => {
     return fn({
       content,
       className: 'custom-antd-message-style',

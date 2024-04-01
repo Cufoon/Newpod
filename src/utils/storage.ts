@@ -22,7 +22,10 @@ async function getItem(key: `${KEY}`): AsyncGet<KEY> {
   return null;
 }
 
-async function setItem(key: `${KEY.ACCOUNT}`, value: Storage[KEY.ACCOUNT]): Promise<boolean>;
+async function setItem(
+  key: `${KEY.ACCOUNT}`,
+  value: Storage[KEY.ACCOUNT]
+): Promise<boolean>;
 async function setItem(key: `${KEY}`, value: Storage[KEY]): Promise<boolean> {
   try {
     await localforage.setItem(key, value);

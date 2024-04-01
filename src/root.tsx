@@ -1,5 +1,6 @@
 import { createRoot } from 'react-dom/client';
-import { ConfigProvider, Message } from '@arco-design/web-react';
+import ConfigProvider from '@arco-design/web-react/es/ConfigProvider';
+import Message from '@arco-design/web-react/es/Message';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faClock,
@@ -15,7 +16,7 @@ import {
 import { faSquare } from '@fortawesome/free-regular-svg-icons';
 import Routes from './route';
 import GlobalStateComponent from './store/provider';
-import './root.scss?raw';
+import './root.scss';
 
 library.add(
   faClock,

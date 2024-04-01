@@ -1,5 +1,5 @@
-import { ReactElement } from 'react';
-import styles from './index.scss';
+import { JSXElementConstructor, ReactElement } from 'react';
+import styles from './index.module.scss';
 import { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { calculateColumns } from './util';
 import Column from './column';
@@ -9,7 +9,13 @@ interface Props<T> {
   render: (item: T, index: number) => ReactNode;
 }
 
-function WaterFall<T>({ dataSource, render }: Props<T>): ReactElement<any, any> | null {
+function WaterFall<T>({
+  dataSource,
+  render
+}: Props<T>): ReactElement<
+  unknown,
+  string | JSXElementConstructor<unknown>
+> | null {
   const [screenWidth, setScreenWidth] = useState(0);
   const resizeDebounceRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
@@ -35,12 +41,15 @@ function WaterFall<T>({ dataSource, render }: Props<T>): ReactElement<any, any> 
     return 7;
   }, [screenWidth]);
 
-  const onScreenResize = (e: any) => {
-    resizeDebounceRef.current && clearTimeout(resizeDebounceRef.current);
-    const w = e.target.innerWidth;
-    resizeDebounceRef.current = setTimeout(() => {
-      setScreenWidth(w);
-    }, 200);
+  const onScreenResize = (e: UIEvent) => {
+    if (e.target !== null) {
+      resizeDebounceRef.current && clearTimeout(resizeDebounceRef.current);
+      const target = e.target as Window;
+      const w = target.innerWidth;
+      resizeDebounceRef.current = setTimeout(() => {
+        setScreenWidth(w);
+      }, 200);
+    }
   };
 
   useEffect(() => {
@@ -56,7 +65,14 @@ function WaterFall<T>({ dataSource, render }: Props<T>): ReactElement<any, any> 
   return (
     <div className={styles.container}>
       {dataFormatted.map((item) => {
-        return <Column key={item.key} width={item.width} listData={item.data} render={render} />;
+        return (
+          <Column
+            key={item.key}
+            width={item.width}
+            listData={item.data}
+            render={render}
+          />
+        );
       })}
     </div>
   );

@@ -1,14 +1,20 @@
-import { Button, Form, Input } from '@arco-design/web-react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { v4 as uuidV4 } from 'uuid';
+import Button from '@arco-design/web-react/es/Button';
+import Form from '@arco-design/web-react/es/Form';
+import Input from '@arco-design/web-react/es/Input';
 import { IconLock, IconTag, IconUser } from '@arco-design/web-react/icon';
 import Footer from '$components/footer';
-import styles from './index.scss';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { addAccount, getCurrentAccount, setCurrentAccountWithoutStore } from '$service/account';
-import { createMessageLoading, GlobalMessage } from '$utils/message';
+import {
+  addAccount,
+  getCurrentAccount,
+  setCurrentAccountWithoutStore
+} from '$service/account';
 import { DnspodAPI } from '$service/dnspod';
+import { createMessageLoading, GlobalMessage } from '$utils/message';
 import { delay, getRandomStr } from '$utils/util';
-import { v4 as uuidV4 } from 'uuid';
+import styles from './index.module.scss';
 
 interface UserFormData {
   userMark: string;
@@ -60,7 +66,7 @@ const LoginPage: React.FC = () => {
         navigate('/');
       }
     })();
-  }, []);
+  }, [navigate]);
 
   return (
     <div className={styles.main}>
@@ -69,7 +75,9 @@ const LoginPage: React.FC = () => {
           <div className={styles.icon} />
           <div className={styles.title}>Newpod</div>
         </div>
-        <div className={styles.titleHint}>红豆生南国，春来发几枝。愿君多采撷，此物最相思。</div>
+        <div className={styles.titleHint}>
+          红豆生南国，春来发几枝。愿君多采撷，此物最相思。
+        </div>
         <Form
           form={form}
           className={styles.form}
@@ -120,7 +128,11 @@ const LoginPage: React.FC = () => {
             />
           </Form.Item>
           <Form.Item className={styles.formItem}>
-            <Button type='primary' htmlType='submit' className={styles.formSubmit}>
+            <Button
+              type='primary'
+              htmlType='submit'
+              className={styles.formSubmit}
+            >
               登录
             </Button>
           </Form.Item>
