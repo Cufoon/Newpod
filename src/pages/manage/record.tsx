@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 import cx from 'classnames';
-import Modal from '@arco-design/web-react/es/Modal';
-import PopConfirm from '@arco-design/web-react/es/Popconfirm';
+import { Modal, Popconfirm } from '@arco-design/web-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from '$components/button';
 import Status from '$components/status';
@@ -173,7 +172,7 @@ const RecordLine: React.FC<Props> = ({
           )}
         >
           <div className={styles.recordFooterItem}>
-            <PopConfirm
+            <Popconfirm
               disabled={checked}
               title='删除解析记录'
               content='确定要删除吗？'
@@ -182,10 +181,10 @@ const RecordLine: React.FC<Props> = ({
               <Button loading={deleteRecordLoading} color={'hsl(0, 38%, 60%)'}>
                 删除
               </Button>
-            </PopConfirm>
+            </Popconfirm>
           </div>
           <div className={styles.recordFooterItem}>
-            <PopConfirm
+            <Popconfirm
               disabled={checked}
               title={data.Status === 'ENABLE' ? '暂停解析' : '继续解析'}
               content={'确定要进行此操作吗？'}
@@ -201,7 +200,7 @@ const RecordLine: React.FC<Props> = ({
               >
                 {data.Status === 'ENABLE' ? '暂停解析' : '继续解析'}
               </Button>
-            </PopConfirm>
+            </Popconfirm>
           </div>
           <div className={styles.recordFooterItem}>
             <Button onClick={() => !checked && onModifyRecord()}>修改</Button>
@@ -211,4 +210,5 @@ const RecordLine: React.FC<Props> = ({
     </div>
   );
 };
+
 export default RecordLine;

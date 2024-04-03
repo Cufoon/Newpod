@@ -1,7 +1,6 @@
 import React, { Key, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Image from '@arco-design/web-react/es/Image';
-import List from '@arco-design/web-react/es/List';
+import { Image, List } from '@arco-design/web-react';
 import { type Dnspod, DnspodAPI } from '$service/dnspod';
 import { createMessageLoading } from '$utils/message';
 import Status from '$components/status';

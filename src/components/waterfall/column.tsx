@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import type { ColumnItem } from './util';
 import styles from './column.module.scss';
 
@@ -8,7 +8,7 @@ interface Props<T> {
   render: (item: T, index: number) => ReactNode;
 }
 
-type ColumnComponent = <T = any>(props: Props<T>) => JSX.Element;
+type ColumnComponent = <T = unknown>(props: Props<T>) => React.JSX.Element;
 
 const Column: ColumnComponent = ({ listData, render, width }) => {
   return (

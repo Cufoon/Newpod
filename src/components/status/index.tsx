@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './index.module.scss';
 
@@ -7,7 +7,7 @@ interface Props {
 }
 
 const Index: React.FC<Props> = ({ status }) => {
-  const result = useMemo<[string, JSX.Element, string]>(() => {
+  const result = useMemo<[string, React.JSX.Element, string]>(() => {
     if (status === 'ENABLE') {
       return [
         'hsl(120, 38%, 60%)',

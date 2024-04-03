@@ -1,6 +1,5 @@
 import { createRoot } from 'react-dom/client';
-import ConfigProvider from '@arco-design/web-react/es/ConfigProvider';
-import Message from '@arco-design/web-react/es/Message';
+import { ConfigProvider, Message } from '@arco-design/web-react';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faClock,

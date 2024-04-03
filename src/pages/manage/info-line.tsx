@@ -1,8 +1,8 @@
 import styles from './info-line.module.scss';
 
 interface Props {
-  icon: string | number | JSX.Element;
-  content: string | number | JSX.Element;
+  icon: string | number | React.JSX.Element;
+  content: string | number | React.JSX.Element;
   color: string;
 }
 

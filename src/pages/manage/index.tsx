@@ -6,14 +6,16 @@ import React, {
   useState
 } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import Button from '@arco-design/web-react/es/Button';
-import Input from '@arco-design/web-react/es/Input';
-import InputNumber from '@arco-design/web-react/es/InputNumber';
-import Modal from '@arco-design/web-react/es/Modal';
-import PopConfirm from '@arco-design/web-react/es/Popconfirm';
-import Radio from '@arco-design/web-react/es/Radio';
-import Select from '@arco-design/web-react/es/Select';
-import Form from '@arco-design/web-react/es/Form';
+import {
+  Button,
+  Input,
+  InputNumber,
+  Modal,
+  Popconfirm,
+  Radio,
+  Select,
+  Form
+} from '@arco-design/web-react';
 import useCheckBeforeRender from '$hooks/useCheckBeforeRender';
 import { type Dnspod, DnspodAPI } from '$service/dnspod';
 import { createMessageLoading, GlobalMessage } from '$utils/message';
@@ -534,7 +536,7 @@ const ManagePage: React.FC = () => {
         >
           <div className={cx(styles.multi, isMultiMode && styles.multiDisplay)}>
             <div className={styles.multiItem}>
-              <PopConfirm
+              <Popconfirm
                 title='删除解析记录'
                 content='确定要批量删除记录吗？'
                 onOk={() => {
@@ -547,10 +549,10 @@ const ManagePage: React.FC = () => {
                 >
                   删除
                 </ButtonMine>
-              </PopConfirm>
+              </Popconfirm>
             </div>
             <div className={styles.multiItem}>
-              <PopConfirm
+              <Popconfirm
                 title={'暂停解析'}
                 content={'确定要进行此批量暂停解析操作吗？'}
                 onOk={() => {
@@ -563,10 +565,10 @@ const ManagePage: React.FC = () => {
                 >
                   {'暂停解析'}
                 </ButtonMine>
-              </PopConfirm>
+              </Popconfirm>
             </div>
             <div className={styles.multiItem}>
-              <PopConfirm
+              <Popconfirm
                 title={'继续解析'}
                 content={'确定要进行此批量继续解析操作吗？'}
                 onOk={() => {
@@ -579,7 +581,7 @@ const ManagePage: React.FC = () => {
                 >
                   {'继续解析'}
                 </ButtonMine>
-              </PopConfirm>
+              </Popconfirm>
             </div>
           </div>
           <Modal

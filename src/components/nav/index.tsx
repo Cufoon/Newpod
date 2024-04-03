@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Button from '@arco-design/web-react/es/Button';
-import Modal from '@arco-design/web-react/es/Modal';
-import PopConfirm from '@arco-design/web-react/es/Popconfirm';
+import { Button, Modal, Popconfirm } from '@arco-design/web-react';
 import { IconSettings } from '@arco-design/web-react/icon';
 import { clearAccounts } from '$service/account';
 import { createMessageLoading } from '$utils/message';
@@ -54,7 +52,7 @@ const Nav: React.FC = () => {
         autoFocus={false}
         focusLock={true}
       >
-        <PopConfirm
+        <Popconfirm
           focusLock
           title='确认要清空所有本地保存的账户吗？'
           onOk={() => onClearAccounts()}
@@ -62,7 +60,7 @@ const Nav: React.FC = () => {
           <Button type='default' status='danger'>
             清除所有账户
           </Button>
-        </PopConfirm>
+        </Popconfirm>
       </Modal>
     </header>
   );

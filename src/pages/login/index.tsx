@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidV4 } from 'uuid';
-import Button from '@arco-design/web-react/es/Button';
-import Form from '@arco-design/web-react/es/Form';
-import Input from '@arco-design/web-react/es/Input';
+import { Button, Form, Input } from '@arco-design/web-react';
 import { IconLock, IconTag, IconUser } from '@arco-design/web-react/icon';
 import Footer from '$components/footer';
 import {

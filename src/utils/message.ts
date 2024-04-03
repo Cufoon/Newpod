@@ -1,4 +1,4 @@
-import Message, { MessageProps } from '@arco-design/web-react/es/Message';
+import { Message, MessageProps } from '@arco-design/web-react';
 import type { MessageType as CloserType } from '@arco-design/web-react/es/Message';
 import React from 'react';
 
