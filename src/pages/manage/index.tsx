@@ -135,8 +135,8 @@ const ManagePage: React.FC = () => {
       }
     }
     return [
-      ...result.slice(0, 3),
-      ...result.slice(3).sort((a, b) => (a.value > b.value ? 1 : -1))
+      ...result.slice(0, 4),
+      ...result.slice(4).sort((a, b) => (a.value > b.value ? 1 : -1))
     ];
   }, [originRecordList]);
 
