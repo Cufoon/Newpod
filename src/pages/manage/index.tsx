@@ -43,6 +43,10 @@ interface FormData {
   recordTTL: number;
 }
 
+// _ is not permit in domain, so this is safe to use.
+const CUFOON_NEWPOD_MAIL_SERVICE = 'cufoon_newpod_mail_service';
+const CUFOON_NEWPOD_CERT_SERVICE = 'cufoon_newpod_cert_service';
+
 const ManagePage: React.FC = () => {
   const navigate = useNavigate();
   const [doCheck, Wrapper] = useCheckBeforeRender();
@@ -61,7 +65,7 @@ const ManagePage: React.FC = () => {
     }
     let result: Dnspod.RecordListItem[] = [];
     if (originRecordList !== undefined) {
-      if (subDomain === 'cufoon-newpod-mail-service') {
+      if (subDomain === CUFOON_NEWPOD_MAIL_SERVICE) {
         for (const recordListItem of originRecordList) {
           if (
             isEmailRecord(
@@ -75,7 +79,7 @@ const ManagePage: React.FC = () => {
         }
         return result;
       }
-      if (subDomain === 'cufoon-newpod-cert-application') {
+      if (subDomain === CUFOON_NEWPOD_CERT_SERVICE) {
         for (const recordListItem of originRecordList) {
           const tmp = recordListItem.Name.split('.');
           if (tmp.length > 0 && tmp[0] === '_acme-challenge') {
@@ -110,8 +114,8 @@ const ManagePage: React.FC = () => {
     let result: { label: string; value: string; disabled?: boolean }[] = [
       { label: '全部', value: '' },
       { label: '主域名', value: '@' },
-      { label: '邮箱', value: 'cufoon-newpod-mail-service' },
-      { label: '证书', value: 'cufoon-newpod-cert-application' }
+      { label: '邮箱', value: CUFOON_NEWPOD_MAIL_SERVICE },
+      { label: '证书', value: CUFOON_NEWPOD_CERT_SERVICE }
     ];
     if (originRecordList === undefined) {
       return result.concat([
@@ -497,6 +501,8 @@ const ManagePage: React.FC = () => {
       recordList.length === 0 &&
       subDomain !== '' &&
       subDomain !== '@' &&
+      subDomain !== CUFOON_NEWPOD_CERT_SERVICE &&
+      subDomain !== CUFOON_NEWPOD_MAIL_SERVICE &&
       notExceptedSubDomain(subDomain)
     ) {
       changeSubdomain('');
