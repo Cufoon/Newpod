@@ -1,1 +1,1 @@
-export const backendForDnspodURL = `/api`;
+export const backendForDnspodURL = `./api`;
